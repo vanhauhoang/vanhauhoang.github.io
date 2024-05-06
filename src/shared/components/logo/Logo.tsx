@@ -1,9 +1,12 @@
 import { FC, ReactElement } from 'react';
 import styles from './logo.module.scss';
 
-type Props = {};
+type Props = {
+    title?: string;
+};
 
 export const Logo: FC<Props> = (props): ReactElement => {
-    return <span className={styles.logo}>Whiskers</span>;
+    const { title } = props;
+    return <span className={styles.logo}>{title || 'Whiskers'}</span>;
 };
 
