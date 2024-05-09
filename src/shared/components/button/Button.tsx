@@ -3,11 +3,18 @@ import styles from './button.module.scss';
 
 type Props = {
     text: string;
+    fontSize?: string;
+    height?: string;
+    fontFamily?: string;
 };
 
 export const Button: FC<Props> = (props): ReactElement => {
-    const { text } = props;
+    const { text, fontSize = '16px', height = '', fontFamily } = props;
 
-    return <button className={styles.button}>{text}</button>;
+    return (
+        <button style={{ fontSize, height, fontFamily }} className={styles.button}>
+            {text}
+        </button>
+    );
 };
 
