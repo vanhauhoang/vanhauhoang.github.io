@@ -1,29 +1,31 @@
 .app {
     &__wrapper {
         width: 100vw;
-        height: 100vh;
+        height: auto;
 
         @media screen and (max-width: 500px) {
-                height: calc(100vh - 150px);
-            }
+            height: calc(100vh - 150px);
+        }
     }
 
     &__container {
         display: flex;
         flex-direction: column;
-        padding-top: 100px;
-        padding-bottom: 300px;
+
         height: 100%;
 
+        padding-top: 100px;
+        padding-bottom: 200px;
+
         @media screen and (max-width: 500px) {
-                padding-top: 50px;
-                padding-bottom: 0;
-            }
+            padding-top: 50px;
+            padding-bottom: 0;
+        }
     }
 
     &__heading {
         font-size: 120px;
-    
+
         @media screen and (max-width: 500px) {
             font-size: 60px;
         }
@@ -56,7 +58,6 @@
             max-width: 1076px;
             max-height: 1044px;
         }
-        
 
         &_button {
             position: absolute;
@@ -88,12 +89,9 @@
         }
     }
 
-
-    &__invitation{
-        padding: 30px 30px 15px ;
+    &__invitation {
+        padding: 30px 30px 15px;
     }
-
-
 
     &__footer_connect {
         width: 100vw;
@@ -106,7 +104,6 @@
         align-items: center;
         justify-content: center;
         padding: 10px 20px 10px 20px;
-
 
         &_container {
             display: flex;
@@ -124,16 +121,15 @@
         }
     }
 
-    &__exta_spins{
+    &__exta_spins {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-       
+
         padding: 50px 110px 0 30px;
 
-        &__free_spin{
-
-            &__score{
+        &__free_spin {
+            &__score {
                 display: flex;
                 flex-direction: row;
                 gap: 5px;
@@ -141,6 +137,4 @@
         }
     }
 }
-
-
 

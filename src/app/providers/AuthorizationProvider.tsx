@@ -9,7 +9,7 @@ export const AuthorizationProvider: FC<Props> = ({ children }): ReactElement[] |
     const [loading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        setTimeout(() => setIsLoading(false), 7000);
+        setTimeout(() => setIsLoading(false), 4000);
     }, []);
 
     if (loading) {
