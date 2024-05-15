@@ -15,6 +15,7 @@ export const BuyTemplate = () => {
     const onNavigateToMainScreen = () => {
         navigate('/whiskers');
     };
+
     return (
         <div className={styles.buy__wrapper}>
             <div className={styles.buy__container}>

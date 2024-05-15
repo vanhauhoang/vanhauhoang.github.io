@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Heading } from '../../shared/components/heading';
 import { Logo } from '../../shared/components/logo';
@@ -10,10 +10,23 @@ import giftIcon from '../../assets/images/gift_icon.png';
 
 import styles from './main-app.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { userApi } from '../../shared/components/api/user/user';
 
 const MainApp: FC = (): ReactElement => {
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
     const navigate = useNavigate();
+
+    const [user, setUser] = useState();
+
+    useEffect(() => {
+        const fetchUserById = async (userId: string) => {
+            return await userApi.getUserInfoById(userId);
+        };
+
+        fetchUserById('1').then((res) => setUser(res.data));
+    }, []);
+
+    console.log('user', user);
 
     const onNavigateToBuyPage = () => {
         navigate('/whiskers/buy');
