@@ -1,12 +1,7 @@
-import MainApp from '../features/main-app/main-app';
-import { AuthorizationProvider } from './providers/AuthorizationProvider';
+import { Routing } from '../pages/routing/routing';
 
 const Application = () => {
-    return (
-        <AuthorizationProvider>
-            <MainApp />
-        </AuthorizationProvider>
-    );
+    return <Routing />;
 };
 
 export default Application;

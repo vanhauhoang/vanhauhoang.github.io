@@ -24,13 +24,12 @@ export const Typography: React.FC<TypographyProps> = ({
 }) => {
     const Component = variant === 'caption' || variant === 'overline' ? 'span' : 'p';
 
-    console.log('font family: ' + fontFamily);
-
     const style = {
         textAlign: align,
         color: color !== 'default' ? color : undefined,
         fontFamily: fontFamily,
         fontSize,
+        lineHeight: fontSize,
     };
 
     return (

@@ -7,12 +7,14 @@ type Props = {
     fontSize?: string;
     height?: string;
     fontFamily?: string;
+    backgroundColor?: string;
     fontWeight?: string;
     imageLeft?: string;
     imageRight?: string;
     width?: string;
     textTransform?: any;
     borderRadius?: string;
+    onClick?: () => void;
 };
 
 export const Button: FC<Props> = (props): ReactElement => {
@@ -25,9 +27,11 @@ export const Button: FC<Props> = (props): ReactElement => {
         fontWeight,
         imageLeft,
         imageRight,
+        backgroundColor,
         width = '100%',
         textTransform = 'uppercase',
         borderRadius,
+        onClick,
     } = props;
 
     const [shouldShake, setShouldShake] = useState(false);
@@ -37,7 +41,7 @@ export const Button: FC<Props> = (props): ReactElement => {
             setShouldShake(true);
             setTimeout(() => {
                 setShouldShake(false);
-            }, 500); // Duration of the shake animation
+            }, 500);
         }, 10_000); // Repeat the shake effect every 2 seconds
 
         return () => clearInterval(shakeInterval);
@@ -45,7 +49,18 @@ export const Button: FC<Props> = (props): ReactElement => {
 
     return (
         <button
-            style={{ fontSize, height, fontFamily, fontWeight, width, textTransform, borderRadius }}
+            onClick={onClick || undefined}
+            style={{
+                fontSize,
+                height,
+                backgroundColor,
+                fontFamily,
+                fontWeight,
+                width,
+                textTransform,
+                borderRadius,
+                backgroundImage: backgroundColor ? 'none' : 'linear-gradient(to bottom, #f2632e, #e93324)',
+            }}
             className={styles.button}
         >
             {imageLeft && (
