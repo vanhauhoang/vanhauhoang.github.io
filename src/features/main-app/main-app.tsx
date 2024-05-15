@@ -2,7 +2,6 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Heading } from '../../shared/components/heading';
 import { Logo } from '../../shared/components/logo';
-import fakeSpin from '../../assets/images/spin_mock.png';
 import loaderIcon from '../../assets/images/loader.png';
 import { Typography } from '../../shared/components/typography';
 import { Button } from '../../shared/components/button';
@@ -12,10 +11,14 @@ import styles from './main-app.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { userApi } from '../../shared/components/api/user/user';
 
+import { WheelDesktop } from '../wheel/wheel-desktop';
+import { WheelMobile } from '../wheel/wheel-mobile';
+
 const MainApp: FC = (): ReactElement => {
-    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
     const navigate = useNavigate();
 
+    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    const [isNeedRotateSpinIcon, setIsNeedRotateSpinIcon] = useState<boolean>(false);
     const [user, setUser] = useState();
 
     useEffect(() => {
@@ -26,10 +29,17 @@ const MainApp: FC = (): ReactElement => {
         fetchUserById('1').then((res) => setUser(res.data));
     }, []);
 
-    console.log('user', user);
-
     const onNavigateToBuyPage = () => {
         navigate('/whiskers/buy');
+    };
+
+    const handleSpinButtonClick = () => {
+        const spinEvent = new Event('spin');
+        window.dispatchEvent(spinEvent);
+        setIsNeedRotateSpinIcon(true);
+        setTimeout(() => {
+            setIsNeedRotateSpinIcon(false);
+        }, 2000);
     };
 
     return (
@@ -37,17 +47,20 @@ const MainApp: FC = (): ReactElement => {
             <div className={styles.app__container}>
                 <div className={styles.app__spin}>
                     <div className={styles.app__title_and_logo}>
-                        <Logo fontSize={isMobile ? '35px' : '70px'} />
+                        <Logo fontSize={isMobile ? '32px' : '70px'} />
                         <span className={styles.app__title}>
                             <Heading className={styles.app__heading} level="h1">
                                 Spin&Earn
                             </Heading>
                         </span>
                     </div>
-                    <img className={styles.app__spin_img} src={fakeSpin} />
-                    <div className={styles.app__spin_button}>
-                        <img className={styles.app__spin_button__loader} src={loaderIcon} />
-                        <Typography fontSize={isMobile ? '50px' : '120px'} fontFamily="Roundy Rainbows, sans-serif">
+                    {isMobile ? <WheelMobile /> : <WheelDesktop />}
+                    <div onClick={handleSpinButtonClick} className={styles.app__spin_button}>
+                        <img
+                            className={`${styles.app__spin_button__loader} ${isNeedRotateSpinIcon ? styles.rotate : ''}`}
+                            src={loaderIcon}
+                        />
+                        <Typography fontSize={isMobile ? '42px' : '120px'} fontFamily="Roundy Rainbows, sans-serif">
                             SPin
                         </Typography>
                     </div>
@@ -92,12 +105,16 @@ const MainApp: FC = (): ReactElement => {
                     <Button
                         imageLeft={giftIcon}
                         fontFamily={'Montserrat, sans-serif'}
-                        height={isMobile ? '100px' : '200px'}
+                        height={isMobile ? '80px' : '200px'}
                         textTransform={'none'}
                         text={'Refer A Friend'}
                         subText={'Get 3 bonus spins'}
                         fontWeight={'bolder'}
-                        borderRadius={'30px'}
+                        borderRadius={'12px'}
+                        stylesForTexts={{
+                            main: { fontSize: isMobile ? '24px' : '42px', fontWeight: 'bold' },
+                            sub: { fontSize: isMobile ? '18px' : '32px', fontWeight: 'normal' },
+                        }}
                     />
                 </div>
 

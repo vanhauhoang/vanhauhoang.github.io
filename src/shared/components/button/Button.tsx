@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { CSSProperties, FC, ReactElement, useEffect, useState } from 'react';
 import styles from './button.module.scss';
 
 type Props = {
@@ -14,6 +14,7 @@ type Props = {
     width?: string;
     textTransform?: any;
     borderRadius?: string;
+    stylesForTexts?: { main: CSSProperties; sub: CSSProperties };
     onClick?: () => void;
 };
 
@@ -31,6 +32,7 @@ export const Button: FC<Props> = (props): ReactElement => {
         width = '100%',
         textTransform = 'uppercase',
         borderRadius,
+        stylesForTexts,
         onClick,
     } = props;
 
@@ -67,8 +69,12 @@ export const Button: FC<Props> = (props): ReactElement => {
                 <img className={`${styles.button__icon_left} ${shouldShake ? styles.shake : ''}`} src={imageLeft} />
             )}
             <div className={styles.button__text_conteiner}>
-                <span className={styles.button__text_conteiner__text}> {text}</span>
-                <span className={styles.button__text_conteiner__subtext}> {subText}</span>
+                <span style={stylesForTexts?.main || {}} className={styles.button__text_conteiner__text}>
+                    {text}
+                </span>
+                <span style={stylesForTexts?.sub || {}} className={styles.button__text_conteiner__subtext}>
+                    {subText}
+                </span>
             </div>
             {imageRight && <img className={styles.button__icon_right} src={imageRight} />}
         </button>

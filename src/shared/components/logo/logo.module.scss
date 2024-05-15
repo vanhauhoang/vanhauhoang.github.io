@@ -1,14 +1,14 @@
 @import '../../../assets/styles/variables.scss';
 
 .logo {
-    padding: 10px 20px;
+    padding: 4px 10px;
     font-size: 32px;
     font-weight: bold;
     color: white;
     text-transform: uppercase;
     font-family: 'Roundy Rainbows', sans-serif; /* Fallback to sans-serif */
     border: none;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: pointer;
     background-color: $originButtonColor; /* fallback color */
     background-image: $linearGradientForButton;
