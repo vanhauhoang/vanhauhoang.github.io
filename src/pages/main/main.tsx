@@ -1,12 +1,8 @@
-import { AuthorizationProvider } from '../../app/providers/AuthorizationProvider';
 import MainApp from '../../features/main-app/main-app';
 
 const Main = () => {
-    return (
-        <AuthorizationProvider>
-            <MainApp />
-        </AuthorizationProvider>
-    );
+    return <MainApp />;
 };
 
 export default Main;
+

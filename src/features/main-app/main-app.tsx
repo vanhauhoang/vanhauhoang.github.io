@@ -1,78 +1,51 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, ReactElement } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { Heading } from '../../shared/components/heading';
-import { Logo } from '../../shared/components/logo';
-import loaderIcon from '../../assets/images/loader.png';
 import { Typography } from '../../shared/components/typography';
 import { Button } from '../../shared/components/button';
 import giftIcon from '../../assets/images/gift_icon.png';
-
-import styles from './main-app.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { userApi } from '../../shared/components/api/user/user';
-
-import { WheelDesktop } from '../wheel/wheel-desktop';
-import { WheelMobile } from '../wheel/wheel-mobile';
+import timeIcon from '../../assets/images/time_icon.png';
+import styles from './main-app.module.scss';
+import { SpinTemplate } from '../spin-template/spin-template';
+import { useAppContext } from '../../app/providers/AppContext';
 
 const MainApp: FC = (): ReactElement => {
     const navigate = useNavigate();
-
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
-    const [isNeedRotateSpinIcon, setIsNeedRotateSpinIcon] = useState<boolean>(false);
-    const [user, setUser] = useState();
-
-    useEffect(() => {
-        const fetchUserById = async (userId: string) => {
-            return await userApi.getUserInfoById(userId);
-        };
-
-        fetchUserById('1').then((res) => setUser(res.data));
-    }, []);
+    const { userData, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
 
     const onNavigateToBuyPage = () => {
         navigate('/whiskers/buy');
     };
 
-    const handleSpinButtonClick = () => {
-        const spinEvent = new Event('spin');
-        window.dispatchEvent(spinEvent);
-        setIsNeedRotateSpinIcon(true);
-        setTimeout(() => {
-            setIsNeedRotateSpinIcon(false);
-        }, 2000);
-    };
-
     return (
         <div className={styles.app__wrapper}>
             <div className={styles.app__container}>
-                <div className={styles.app__spin}>
-                    <div className={styles.app__title_and_logo}>
-                        <Logo fontSize={isMobile ? '32px' : '70px'} />
-                        <span className={styles.app__title}>
-                            <Heading className={styles.app__heading} level="h1">
-                                Spin&Earn
-                            </Heading>
-                        </span>
-                    </div>
-                    {isMobile ? <WheelMobile /> : <WheelDesktop />}
-                    <div onClick={handleSpinButtonClick} className={styles.app__spin_button}>
-                        <img
-                            className={`${styles.app__spin_button__loader} ${isNeedRotateSpinIcon ? styles.rotate : ''}`}
-                            src={loaderIcon}
-                        />
-                        <Typography fontSize={isMobile ? '42px' : '120px'} fontFamily="Roundy Rainbows, sans-serif">
-                            SPin
-                        </Typography>
-                    </div>
-                </div>
+                {/* Spin Template */}
+                <SpinTemplate />
 
                 <div className={styles.app__extra_spins}>
                     <div className={styles.app__extra_spins__free_spin}>
                         <Typography fontSize={isMobile ? '16px' : '40px'}>Free spins</Typography>
                         <div className={styles.app__extra_spins__free_spin__score}>
-                            <Typography fontSize={isMobile ? '36px' : '50px'} fontFamily="Roundy Rainbows, sans-serif">
-                                2
+                            <Typography
+                                color={userData.spinsAvailable === 0 ? '#73747f' : '#fff'}
+                                fontSize={isMobile ? '36px' : '50px'}
+                                fontFamily="Roundy Rainbows, sans-serif"
+                            >
+                                {userData.spinsAvailable}
                             </Typography>
+                            {userData?.spinsAvailable < 2 ? (
+                                <div className={styles.app__extra_spins__free_spin__recharge}>
+                                    <img className={styles.app__extra_spins__free_spin__time_icon} src={timeIcon} />
+                                    <Typography
+                                        fontSize={isMobile ? '12px' : '50px'}
+                                        fontFamily="Montserrat, sans-serif"
+                                    >
+                                        New spin in <br /> 5 hours
+                                    </Typography>
+                                </div>
+                            ) : null}
                         </div>
                     </div>
                     <div className={styles.app__extra_spins__bonus_spin}>
@@ -80,10 +53,11 @@ const MainApp: FC = (): ReactElement => {
                             <Typography fontSize={isMobile ? '16px' : '40px'}>Bonus spins</Typography>
                             <div className={styles.app__extra_spins__bonus_spin__buy_spins}>
                                 <Typography
+                                    color={userData.bonusSpins === 0 ? '#73747f' : '#fff'}
                                     fontSize={isMobile ? '36px' : '50px'}
                                     fontFamily="Roundy Rainbows, sans-serif"
                                 >
-                                    75
+                                    {userData.bonusSpins}
                                 </Typography>
                                 <Button
                                     onClick={onNavigateToBuyPage}
@@ -123,7 +97,7 @@ const MainApp: FC = (): ReactElement => {
                         <div className={styles.app__footer_connect_score}>
                             <Typography fontSize={isMobile ? '16px' : '40px'}>Unclaimed whisk</Typography>
                             <Typography fontSize={isMobile ? '30px' : '50px'} fontFamily="Roundy Rainbows, sans-serif">
-                                10200
+                                {userData.unclaimedTokens}
                             </Typography>
                         </div>
                         <Button
