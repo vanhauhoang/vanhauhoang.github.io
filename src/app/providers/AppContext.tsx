@@ -3,7 +3,7 @@ import LoaderScreen from '../../features/loader-screen/LoaderScreen';
 import { fetchUserById } from '../../shared/components/api/user/thunks';
 
 // Define the shape of the user data
-interface UserData {
+export interface UserData {
     bonusSpins: number;
     createdAt: string;
     referralCode: string;
@@ -19,7 +19,7 @@ interface UserData {
 
 // Define the shape of the context
 interface AppContextType {
-    userData: UserData;
+    userData: UserData | null;
     updateFreeSpins: () => void;
     updateBonusSpins: () => void;
     updateTempWinScore: (score: number) => void;

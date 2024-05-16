@@ -29,7 +29,9 @@ export const SpinTemplate = () => {
 
         const spinEvent = new Event('spin');
         window.dispatchEvent(spinEvent);
+
         setIsNeedRotateSpinIcon(true);
+
         audioRef.current.play();
 
         setTimeout(() => {
@@ -52,7 +54,7 @@ export const SpinTemplate = () => {
                 <source src={soundWheel} type="audio/mpeg" />
                 Your browser does not support the audio element.
             </audio>
-            {isMobile ? <WheelMobile updateTempWinScore={updateTempWinScore} /> : <WheelDesktop />}
+            {isMobile ? <WheelMobile userData={userData} updateTempWinScore={updateTempWinScore} /> : <WheelDesktop />}
             <div onClick={handleSpinButtonClick} className={styles.app__spin_button}>
                 <img
                     className={`${styles.app__spin_button__loader} ${isNeedRotateSpinIcon ? styles.rotate : ''}`}

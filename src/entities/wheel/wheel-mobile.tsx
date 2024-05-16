@@ -1,12 +1,14 @@
 import { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import kitty from '../../assets/images/kitty.png';
 import { spinWheelByUser } from '../../shared/components/api/user/thunks';
+import { UserData } from '../../app/providers/AppContext';
 
 interface WheelMobileProps {
+    userData: UserData;
     updateTempWinScore: (score: number) => void;
 }
 
-export const WheelMobile: FC<WheelMobileProps> = ({ updateTempWinScore }): ReactElement => {
+export const WheelMobile: FC<WheelMobileProps> = ({ userData, updateTempWinScore }): ReactElement => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const image = useRef(new Image());
     const sectorsData = [
@@ -160,6 +162,7 @@ export const WheelMobile: FC<WheelMobileProps> = ({ updateTempWinScore }): React
                 // add score setter
                 spinWheelByUser('1', {
                     winScore: sectorsData?.[i]?.value,
+                    isFreeSpin: userData?.spinsAvailable > 0 ? false : true,
                 }).then((res: any) => {
                     if (res.status === 200) updateTempWinScore(sectorsData?.[i]?.value);
                 });
