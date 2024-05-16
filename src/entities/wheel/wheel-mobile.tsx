@@ -141,8 +141,8 @@ export const WheelMobile: FC<WheelMobileProps> = ({ updateTempWinScore }): React
 
         spinCount++;
         animate({
-            duration: 7000,
-            timing: bounceEaseOut,
+            duration: 5000,
+            timing: timing,
         });
     }
 
@@ -159,7 +159,7 @@ export const WheelMobile: FC<WheelMobileProps> = ({ updateTempWinScore }): React
             if (randomNumber < upperBorder) {
                 // add score setter
                 spinWheelByUser('1', {
-                    winBonus: sectorsData?.[i]?.value,
+                    winScore: sectorsData?.[i]?.value,
                 }).then((res: any) => {
                     if (res.status === 200) updateTempWinScore(sectorsData?.[i]?.value);
                 });
@@ -189,24 +189,32 @@ export const WheelMobile: FC<WheelMobileProps> = ({ updateTempWinScore }): React
             }
         });
     }
+    // //@ts-ignore
+    // function makeEaseOut(timing) {
+    //     //@ts-ignore
+    //     return function (timeFraction) {
+    //         return 1 - timing(1 - timeFraction);
+    //     };
+    // }
+    // //@ts-ignore
+    // function bounce(timeFraction) {
+    //     //@ts-ignore
+    //     for (let a = 0, b = 1; 1; a += b, b /= 2) {
+    //         if (timeFraction >= (7 - 4 * a) / 11) {
+    //             return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2);
+    //         }
+    //     }
+    // }
+
+    // const bounceEaseOut = makeEaseOut(bounce);
     //@ts-ignore
-    function makeEaseOut(timing) {
-        //@ts-ignore
-        return function (timeFraction) {
-            return 1 - timing(1 - timeFraction);
-        };
-    }
-    //@ts-ignore
-    function bounce(timeFraction) {
-        //@ts-ignore
-        for (let a = 0, b = 1; 1; a += b, b /= 2) {
-            if (timeFraction >= (7 - 4 * a) / 11) {
-                return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2);
-            }
+    function timing(timeFraction) {
+        if (timeFraction < 0.25) {
+            return timeFraction * 2;
+        } else {
+            return Math.pow(timeFraction, 1 / 2);
         }
     }
-
-    const bounceEaseOut = makeEaseOut(bounce);
     //@ts-ignore
     function redrawWheel(beginTwistAngle) {
         ctx.clearRect(0, 0, dpiWidth, dpiHeight);

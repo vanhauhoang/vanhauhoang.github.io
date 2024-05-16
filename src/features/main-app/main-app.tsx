@@ -29,11 +29,11 @@ const MainApp: FC = (): ReactElement => {
                         <Typography fontSize={isMobile ? '16px' : '40px'}>Free spins</Typography>
                         <div className={styles.app__extra_spins__free_spin__score}>
                             <Typography
-                                color={userData.spinsAvailable === 0 ? '#73747f' : '#fff'}
+                                color={userData?.spinsAvailable === 0 ? '#73747f' : '#fff'}
                                 fontSize={isMobile ? '36px' : '50px'}
                                 fontFamily="Roundy Rainbows, sans-serif"
                             >
-                                {userData.spinsAvailable}
+                                {userData?.spinsAvailable}
                             </Typography>
                             {userData?.spinsAvailable < 2 ? (
                                 <div className={styles.app__extra_spins__free_spin__recharge}>
@@ -53,11 +53,11 @@ const MainApp: FC = (): ReactElement => {
                             <Typography fontSize={isMobile ? '16px' : '40px'}>Bonus spins</Typography>
                             <div className={styles.app__extra_spins__bonus_spin__buy_spins}>
                                 <Typography
-                                    color={userData.bonusSpins === 0 ? '#73747f' : '#fff'}
+                                    color={userData?.bonusSpins === 0 ? '#73747f' : '#fff'}
                                     fontSize={isMobile ? '36px' : '50px'}
                                     fontFamily="Roundy Rainbows, sans-serif"
                                 >
-                                    {userData.bonusSpins}
+                                    {userData?.bonusSpins}
                                 </Typography>
                                 <Button
                                     onClick={onNavigateToBuyPage}
@@ -97,7 +97,7 @@ const MainApp: FC = (): ReactElement => {
                         <div className={styles.app__footer_connect_score}>
                             <Typography fontSize={isMobile ? '16px' : '40px'}>Unclaimed whisk</Typography>
                             <Typography fontSize={isMobile ? '30px' : '50px'} fontFamily="Roundy Rainbows, sans-serif">
-                                {userData.unclaimedTokens}
+                                {userData?.unclaimedTokens}
                             </Typography>
                         </div>
                         <Button

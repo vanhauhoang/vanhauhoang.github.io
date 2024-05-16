@@ -138,7 +138,7 @@ export const WheelDesktop = () => {
         spinCount++;
         animate({
             duration: 5000,
-            timing: bounceEaseOut,
+            timing: timing,
         });
     }
 
@@ -179,23 +179,31 @@ export const WheelDesktop = () => {
             }
         });
     }
+    // //@ts-ignore
+    // function makeEaseOut(timing) {
+    //     //@ts-ignore
+    //     return function (timeFraction) {
+    //         return 1 - timing(1 - timeFraction);
+    //     };
+    // }
+    // //@ts-ignore
+    // function bounce(timeFraction) {
+    //     for (let a = 0, b = 1; 1; a += b, b /= 2) {
+    //         if (timeFraction >= (7 - 4 * a) / 11) {
+    //             return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2);
+    //         }
+    //     }
+    // }
+
+    // const bounceEaseOut = makeEaseOut(bounce);
     //@ts-ignore
-    function makeEaseOut(timing) {
-        //@ts-ignore
-        return function (timeFraction) {
-            return 1 - timing(1 - timeFraction);
-        };
-    }
-    //@ts-ignore
-    function bounce(timeFraction) {
-        for (let a = 0, b = 1; 1; a += b, b /= 2) {
-            if (timeFraction >= (7 - 4 * a) / 11) {
-                return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2);
-            }
+    function timing(timeFraction) {
+        if (timeFraction < 0.25) {
+            return timeFraction * 2;
+        } else {
+            return Math.pow(timeFraction, 1 / 2);
         }
     }
-
-    const bounceEaseOut = makeEaseOut(bounce);
     //@ts-ignore
     function redrawWheel(beginTwistAngle) {
         ctx.clearRect(0, 0, dpiWidth, dpiHeight);

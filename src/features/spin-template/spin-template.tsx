@@ -21,7 +21,7 @@ export const SpinTemplate = () => {
     const handleSpinButtonClick = () => {
         if (isNeedRotateSpinIcon) return;
 
-        if (userData.bonusSpins > 0) {
+        if (userData?.bonusSpins > 0) {
             updateBonusSpins();
         } else {
             updateFreeSpins();

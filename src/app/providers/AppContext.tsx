@@ -46,7 +46,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
         setTimeout(() => setIsLoading(false), 4000);
     }, []);
 
-    if (loading || !userData) {
+    if (loading) {
         return <LoaderScreen />;
     }
 
@@ -71,7 +71,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     const updateBonusSpins = () => {
         setUserData((prevUserData: any) => ({
             ...prevUserData,
-            bonusSpins: prevUserData.bonusSpins + 1,
+            bonusSpins: prevUserData.bonusSpins - 1,
         }));
     };
 
