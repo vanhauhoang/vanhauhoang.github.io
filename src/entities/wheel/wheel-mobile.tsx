@@ -19,7 +19,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const image = useRef(new Image());
     const canvasRef = useRef<any>(null);
-    const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
+    const [ctx, setCtx] = useState<CanvasRenderingContext2D | any>(null);
 
     const sectorsData = [
         { value: 10, colour: '#10c569' },
@@ -224,6 +224,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
         drawInnerWheelPart();
 
         const { image, x, y, w, h } = pictureParams;
+        //@ts-ignore
         ctx.drawImage(image.current, x, y, w, h);
 
         drawTriangle();

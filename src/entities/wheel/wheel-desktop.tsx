@@ -16,7 +16,7 @@ export const WheelDesktop = () => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const image = useRef(new Image());
     const canvasRef = useRef<any>(null);
-    const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
+    const [ctx, setCtx] = useState<CanvasRenderingContext2D | any>(null);
 
     const sectorsData = [
         { value: 10, colour: '#10c569' },
