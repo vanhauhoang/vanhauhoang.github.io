@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Typography } from '../../shared/components/typography';
 import { Button } from '../../shared/components/button';
@@ -12,7 +12,18 @@ import { useAppContext } from '../../app/providers/AppContext';
 const MainApp: FC = (): ReactElement => {
     const navigate = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    const [rotateIcon, setRotateIcon] = useState<boolean>(false);
+    const timeIconRef = useRef<HTMLImageElement>(null);
+    //@ts-ignore
     const { userData, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setRotateIcon((prevRotate) => !prevRotate);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     const onNavigateToBuyPage = () => {
         navigate('/whiskers/buy');
@@ -23,23 +34,28 @@ const MainApp: FC = (): ReactElement => {
             <div className={styles.app__container}>
                 {/* Spin Template */}
                 <SpinTemplate />
-
                 <div className={styles.app__extra_spins}>
                     <div className={styles.app__extra_spins__free_spin}>
                         <Typography fontSize={isMobile ? '16px' : '40px'}>Free spins</Typography>
                         <div className={styles.app__extra_spins__free_spin__score}>
                             <Typography
+                                className={styles.app__extra_spins__free_spin__score_p}
                                 color={userData?.spinsAvailable === 0 ? '#73747f' : '#fff'}
-                                fontSize={isMobile ? '36px' : '50px'}
+                                fontSize={isMobile ? '28px' : '50px'}
                                 fontFamily="Roundy Rainbows, sans-serif"
                             >
                                 {userData?.spinsAvailable}
                             </Typography>
+                            {/*@ts-ignore*/}
                             {userData?.spinsAvailable < 2 ? (
                                 <div className={styles.app__extra_spins__free_spin__recharge}>
-                                    <img className={styles.app__extra_spins__free_spin__time_icon} src={timeIcon} />
+                                    <img
+                                        ref={timeIconRef}
+                                        className={`${styles.app__extra_spins__free_spin__time_icon} ${rotateIcon ? styles.rotate : ''}`}
+                                        src={timeIcon}
+                                    />
                                     <Typography
-                                        fontSize={isMobile ? '12px' : '50px'}
+                                        fontSize={isMobile ? '12px' : '23px'}
                                         fontFamily="Montserrat, sans-serif"
                                     >
                                         New spin in <br /> 5 hours
@@ -54,7 +70,7 @@ const MainApp: FC = (): ReactElement => {
                             <div className={styles.app__extra_spins__bonus_spin__buy_spins}>
                                 <Typography
                                     color={userData?.bonusSpins === 0 ? '#73747f' : '#fff'}
-                                    fontSize={isMobile ? '36px' : '50px'}
+                                    fontSize={isMobile ? '28px' : '50px'}
                                     fontFamily="Roundy Rainbows, sans-serif"
                                 >
                                     {userData?.bonusSpins}
@@ -69,6 +85,10 @@ const MainApp: FC = (): ReactElement => {
                                     text={'Buy spins'}
                                     fontWeight={'bolder'}
                                     borderRadius={'30px'}
+                                    stylesForTexts={{
+                                        main: { fontSize: isMobile ? '16px' : '32px', fontWeight: 'normal' },
+                                        sub: { fontSize: isMobile ? '18px' : '32px', fontWeight: 'normal' },
+                                    }}
                                 />
                             </div>
                         </div>

@@ -23,6 +23,10 @@
 
     &__invitation {
         padding: 30px 30px 15px;
+
+        @media (min-width: 500px) {
+            width: 60%;
+        }
     }
 
     &__footer_connect {
@@ -57,25 +61,38 @@
 
         padding: 40px 30px 0;
 
+        @media (min-width: 500px) {
+            padding-top: 70px;
+        }
+
         &__free_spin {
             display: flex;
             flex: 1;
             flex-direction: column;
-            gap: 5px;
+            gap: 10px;
             &__score {
                 display: flex;
                 flex-direction: row;
-                gap: 5px;
+                gap: 12px;
+                &_p {
+                    transform: translateY(3px);
+                }
             }
 
             &__recharge {
                 display: flex;
                 align-items: flex-end;
-                gap: 5px;
+                gap: 8px;
+                padding-bottom: 0px;
             }
 
             &__time_icon {
                 height: 20px;
+                transition: transform 1s ease;
+            }
+
+            .rotate {
+                animation: rotate180 1s forwards;
             }
         }
 
@@ -87,7 +104,7 @@
             &__text_wrapper {
                 display: flex;
                 flex-direction: column;
-                gap: 5px;
+                gap: 10px;
             }
 
             &__buy_spins {
@@ -106,6 +123,15 @@
     }
     to {
         transform: rotate(0deg);
+    }
+}
+
+@keyframes rotate180 {
+    0% {
+        transform: rotate(0deg); // Start rotation from 0 degrees
+    }
+    100% {
+        transform: rotate(180deg); // Rotate by 180 degrees
     }
 }
 

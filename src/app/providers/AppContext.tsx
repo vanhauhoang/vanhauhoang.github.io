@@ -1,6 +1,6 @@
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import LoaderScreen from '../../features/loader-screen/LoaderScreen';
-import { fetchUserById } from '../../shared/components/api/user/thunks';
+import { fetchUserById, spinWheelByUser } from '../../shared/components/api/user/thunks';
 
 // Define the shape of the user data
 export interface UserData {
@@ -20,8 +20,9 @@ export interface UserData {
 // Define the shape of the context
 interface AppContextType {
     userData: UserData | null;
+    isFreeSpins: boolean | null;
     updateFreeSpins: () => void;
-    updateBonusSpins: () => void;
+    updateBonusSpins: (countSpins?: number) => void;
     updateTempWinScore: (score: number) => void;
 }
 
@@ -40,6 +41,21 @@ export const useAppContext = () => {
 export const AppContextProvider: React.FC<{ children: ReactElement | ReactElement[] }> = ({ children }) => {
     const [userData, setUserData] = useState<UserData | null>(null);
     const [loading, setIsLoading] = useState<boolean>(true);
+    const [isFreeSpins, setIsFreeSpins] = useState<boolean | null>(false);
+
+    console.log('isFreeSpins', isFreeSpins);
+
+    useEffect(() => {
+        //@ts-ignore
+        if (userData?.bonusSpins > 0) {
+            setIsFreeSpins(false);
+            //@ts-ignore
+        } else if (userData?.spinsAvailable > 0) {
+            setIsFreeSpins(true);
+        } else {
+            setIsFreeSpins(null);
+        }
+    }, [userData]);
 
     useEffect(() => {
         fetchUserById('1').then((res) => setUserData(res?.data));
@@ -51,12 +67,19 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     }
 
     const updateTempWinScore = (score: number) => {
-        setTimeout(() => {
-            setUserData((prevUserData: any) => ({
-                ...prevUserData,
-                unclaimedTokens: prevUserData.unclaimedTokens + score,
-            }));
-        }, 7_000);
+        spinWheelByUser('1', {
+            winScore: score,
+            isFreeSpin: isFreeSpins,
+        }).then((res) => {
+            if (res && res.status && res?.status === 200) {
+                setTimeout(() => {
+                    setUserData((prevUserData: any) => ({
+                        ...prevUserData,
+                        unclaimedTokens: prevUserData.unclaimedTokens + score,
+                    }));
+                }, 7_000);
+            }
+        });
     };
 
     const updateFreeSpins = () => {
@@ -68,15 +91,22 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
         }
     };
 
-    const updateBonusSpins = () => {
-        setUserData((prevUserData: any) => ({
-            ...prevUserData,
-            bonusSpins: prevUserData.bonusSpins - 1,
-        }));
+    const updateBonusSpins = (countSpins?: number) => {
+        if (countSpins) {
+            setUserData((prevUserData: any) => ({
+                ...prevUserData,
+                bonusSpins: (prevUserData.bonusSpins += countSpins),
+            }));
+        } else {
+            setUserData((prevUserData: any) => ({
+                ...prevUserData,
+                bonusSpins: prevUserData.bonusSpins - 1,
+            }));
+        }
     };
 
     return (
-        <AppContext.Provider value={{ userData, updateTempWinScore, updateFreeSpins, updateBonusSpins }}>
+        <AppContext.Provider value={{ userData, isFreeSpins, updateTempWinScore, updateFreeSpins, updateBonusSpins }}>
             {children}
         </AppContext.Provider>
     );

@@ -23,3 +23,12 @@ export const spinWheelByUser = async (userId: string, body: any) => {
     }
 };
 
+export const buySpinsByUser = async (userId: string, body: any) => {
+    try {
+        const res = await userApi.buySpins(userId, body);
+        return res;
+    } catch (err) {
+        console.error(err);
+    }
+};
+

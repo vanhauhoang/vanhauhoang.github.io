@@ -14,31 +14,30 @@ import { useAppContext } from '../../app/providers/AppContext';
 
 export const SpinTemplate = () => {
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
-    const audioRef = React.createRef<any>();
-    const [isNeedRotateSpinIcon, setIsNeedRotateSpinIcon] = useState<boolean>(false);
-    const { userData, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
+    // const audioRef = React.createRef<any>();
+    // const [isNeedRotateSpinIcon, setIsNeedRotateSpinIcon] = useState<boolean>(false);
+    // const { userData, isFreeSpins, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
 
-    const handleSpinButtonClick = () => {
-        if (isNeedRotateSpinIcon) return;
+    // const handleSpinButtonClick = () => {
+    //     if (isNeedRotateSpinIcon || !isFreeSpins === null) return;
 
-        if (userData?.bonusSpins > 0) {
-            updateBonusSpins();
-        } else {
-            updateFreeSpins();
-        }
+    //     if (!isFreeSpins) {
+    //         updateBonusSpins();
+    //     } else {
+    //         updateFreeSpins();
+    //     }
 
-        const spinEvent = new Event('spin');
-        window.dispatchEvent(spinEvent);
+    //     const spinEvent = new Event('spin');
+    //     window.dispatchEvent(spinEvent);
 
-        setIsNeedRotateSpinIcon(true);
+    //     setIsNeedRotateSpinIcon(true);
 
-        audioRef.current.play();
+    //     audioRef.current.play();
 
-        setTimeout(() => {
-            setIsNeedRotateSpinIcon(false);
-            audioRef.current.pause();
-        }, 7_000);
-    };
+    //     setTimeout(() => {
+    //         setIsNeedRotateSpinIcon(false);
+    //     }, 8_000);
+    // };
 
     return (
         <div className={styles.app__spin}>
@@ -50,20 +49,7 @@ export const SpinTemplate = () => {
                     </Heading>
                 </span>
             </div>
-            <audio ref={audioRef}>
-                <source src={soundWheel} type="audio/mpeg" />
-                Your browser does not support the audio element.
-            </audio>
-            {isMobile ? <WheelMobile userData={userData} updateTempWinScore={updateTempWinScore} /> : <WheelDesktop />}
-            <div onClick={handleSpinButtonClick} className={styles.app__spin_button}>
-                <img
-                    className={`${styles.app__spin_button__loader} ${isNeedRotateSpinIcon ? styles.rotate : ''}`}
-                    src={loaderIcon}
-                />
-                <Typography fontSize={isMobile ? '42px' : '120px'} fontFamily="Roundy Rainbows, sans-serif">
-                    SPin
-                </Typography>
-            </div>
+            {isMobile ? <WheelMobile /> : <WheelDesktop />}
         </div>
     );
 };

@@ -3,6 +3,9 @@ import styles from './but-token-row.module.scss';
 import { Typography } from '../../shared/components/typography';
 import { Button } from '../../shared/components/button';
 import { useMediaQuery } from 'react-responsive';
+import { Flip, toast } from 'react-toastify';
+import { buySpinsByUser } from '../../shared/components/api/user/thunks';
+import { useAppContext } from '../../app/providers/AppContext';
 
 type BuyRow = {
     id: number;
@@ -12,8 +15,41 @@ type BuyRow = {
 
 export const BuyTokenRow: FC<BuyRow> = (row): ReactElement => {
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    const { updateBonusSpins } = useAppContext();
 
     const { id, countSpin, countWhisk } = row;
+
+    const onBuyBonusToken = async (countSpin: number) => {
+        const res = await buySpinsByUser('1', { countSpins: countSpin });
+
+        if (res?.status === 200) {
+            updateBonusSpins(countSpin);
+
+            toast.success(`You bought ${countSpin} spins`, {
+                position: 'bottom-left',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+                transition: Flip,
+            });
+        } else {
+            toast.error(`Can't buy spins.`, {
+                position: 'bottom-left',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+                transition: Flip,
+            });
+        }
+    };
     return (
         <div key={id} className={styles.buy_row__wrapper}>
             <div className={styles.buy_row__container}>
@@ -34,6 +70,7 @@ export const BuyTokenRow: FC<BuyRow> = (row): ReactElement => {
                     </Typography>
                 </div>
                 <Button
+                    onClick={() => onBuyBonusToken(countSpin)}
                     fontFamily={'Montserrat, sans-serif'}
                     height={isMobile ? '28px' : '52px'}
                     fontSize={isMobile ? '16px' : '28px'}

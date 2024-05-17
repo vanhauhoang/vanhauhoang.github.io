@@ -1,16 +1,26 @@
 import { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import kitty from '../../assets/images/kitty.png';
-import { spinWheelByUser } from '../../shared/components/api/user/thunks';
-import { UserData } from '../../app/providers/AppContext';
+import loaderIcon from '../../assets/images/loader.png';
+import { useAppContext } from '../../app/providers/AppContext';
+import soundWheel from '../../assets/sounds/Fortune-Prize-Wheel-01.mp3';
+import React from 'react';
+import { Typography } from '../../shared/components/typography';
+import { useMediaQuery } from 'react-responsive';
 
-interface WheelMobileProps {
-    userData: UserData;
-    updateTempWinScore: (score: number) => void;
-}
+import styles from './wheel.module.scss';
 
-export const WheelMobile: FC<WheelMobileProps> = ({ userData, updateTempWinScore }): ReactElement => {
+interface WheelMobileProps {}
+
+export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
+    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    const { isFreeSpins, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
+    const [isNeedRotateSpinIcon, setIsNeedRotateSpinIcon] = useState<boolean>(false);
+    const audioRef = React.createRef<any>();
     const [imageLoaded, setImageLoaded] = useState(false);
     const image = useRef(new Image());
+    const canvasRef = useRef<any>(null);
+    const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
+
     const sectorsData = [
         { value: 10, colour: '#10c569' },
         { value: 5, colour: '#0694d4' },
@@ -69,10 +79,26 @@ export const WheelMobile: FC<WheelMobileProps> = ({ userData, updateTempWinScore
     const inverseValuesSum = sectorsData?.reduce((total, elem) => total + 1 / elem.value, 0);
     let spinCount = 0;
 
-    //@ts-ignore
-    let canvas: any;
-    //@ts-ignore
-    let ctx: any;
+    useEffect(() => {
+        if (canvasRef.current) {
+            const context = canvasRef.current.getContext('2d');
+            if (context) {
+                setCtx(context);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        if (canvasRef?.current) {
+            if (ctx) {
+                canvasRef.current.width = dpiWidth;
+                canvasRef.current.height = dpiHeight;
+                canvasRef.current.style.width = width + 'px';
+                canvasRef.current.style.height = height + 'px';
+                InitializeWheel(); // Initialize the wheel
+            }
+        }
+    }, [imageLoaded, ctx, dpiWidth, dpiHeight, InitializeWheel]);
 
     useEffect(() => {
         image.current.onload = () => {
@@ -81,35 +107,30 @@ export const WheelMobile: FC<WheelMobileProps> = ({ userData, updateTempWinScore
         image.current.src = kitty;
     }, []);
 
-    useEffect(() => {
-        if (imageLoaded) {
-            canvas = document.getElementById('canvas');
-            ctx = canvas?.getContext('2d');
-
-            if (ctx && canvas) {
-                canvas.width = dpiWidth;
-                canvas.height = dpiHeight;
-                canvas.style.width = width + 'px';
-                canvas.style.height = height + 'px';
-                InitializeWheel(); // Pass ctx and canvas to InitializeWheel function
-            }
-
-            const handleSpin = () => {
-                twistWheel();
-            };
-
-            window.addEventListener('spin', handleSpin);
-
-            return () => {
-                window.removeEventListener('spin', handleSpin);
-            };
-        }
-    }, [imageLoaded]);
-
     function InitializeWheel() {
         assignProbabilities();
         drawWheel(beginTwistAngle, sectorsData);
     }
+
+    const handleSpinButtonClick = () => {
+        if (isNeedRotateSpinIcon || isFreeSpins === null) return;
+
+        if (!isFreeSpins) {
+            updateBonusSpins();
+        } else {
+            updateFreeSpins();
+        }
+
+        twistWheel();
+
+        setIsNeedRotateSpinIcon(true);
+
+        audioRef.current.play();
+
+        setTimeout(() => {
+            setIsNeedRotateSpinIcon(false);
+        }, 8_000);
+    };
 
     function assignProbabilities(coeff = 360) {
         //probabilities sum will might be equal to 1, so the remainder part will be added to the smallest value
@@ -139,7 +160,6 @@ export const WheelMobile: FC<WheelMobileProps> = ({ userData, updateTempWinScore
 
         winAngle = -randomSectorCenter;
         if (winAngle >= 1) winAngle--;
-        if (winAngle < 0) winAngle++;
 
         spinCount++;
         animate({
@@ -160,21 +180,13 @@ export const WheelMobile: FC<WheelMobileProps> = ({ userData, updateTempWinScore
             upperBorder += sectorsData[i].probability;
             if (randomNumber < upperBorder) {
                 // add score setter
-                spinWheelByUser('1', {
-                    winScore: sectorsData?.[i]?.value,
-                    isFreeSpin: userData?.spinsAvailable > 0 ? false : true,
-                }).then((res: any) => {
-                    if (res.status === 200) updateTempWinScore(sectorsData?.[i]?.value);
-                });
-
+                updateTempWinScore(sectorsData?.[i]?.value);
                 //@ts-ignore
                 randomSector = sectorsData[i];
                 return i;
                 // break
             }
         }
-
-        // return randomSector
     }
     //@ts-ignore
     function animate({ timing, duration }) {
@@ -192,24 +204,6 @@ export const WheelMobile: FC<WheelMobileProps> = ({ userData, updateTempWinScore
             }
         });
     }
-    // //@ts-ignore
-    // function makeEaseOut(timing) {
-    //     //@ts-ignore
-    //     return function (timeFraction) {
-    //         return 1 - timing(1 - timeFraction);
-    //     };
-    // }
-    // //@ts-ignore
-    // function bounce(timeFraction) {
-    //     //@ts-ignore
-    //     for (let a = 0, b = 1; 1; a += b, b /= 2) {
-    //         if (timeFraction >= (7 - 4 * a) / 11) {
-    //             return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2);
-    //         }
-    //     }
-    // }
-
-    // const bounceEaseOut = makeEaseOut(bounce);
     //@ts-ignore
     function timing(timeFraction) {
         if (timeFraction < 0.25) {
@@ -371,7 +365,20 @@ export const WheelMobile: FC<WheelMobileProps> = ({ userData, updateTempWinScore
     }
     return (
         <>
-            <canvas id="canvas" />
+            <audio ref={audioRef}>
+                <source src={soundWheel} type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
+            <canvas ref={canvasRef} id="canvas" />
+            <div onClick={handleSpinButtonClick} className={styles.app__spin_button}>
+                <img
+                    className={`${styles.app__spin_button__loader} ${isNeedRotateSpinIcon ? styles.rotate : ''}`}
+                    src={loaderIcon}
+                />
+                <Typography fontSize={isMobile ? '42px' : '120px'} fontFamily="Roundy Rainbows, sans-serif">
+                    SPin
+                </Typography>
+            </div>
         </>
     );
 };
