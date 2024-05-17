@@ -72,12 +72,12 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
         fillColor: '#fff',
         textFont: `${dpiTextFontSize}px Roundy Rainbows, sans-serif`,
     };
-    let beginTwistAngle = 0.25; //changes after every spin
+    const [beginTwistAngle, setBeginTwistAngel] = useState(0.25); //changes after every spin
     const turns = 2; //number of turns for one spin
-    let winAngle = 0;
+    const [winAngle, setWinAngle] = useState(0);
     const oneSectorAngle = 1 / sectorsData.length;
     const inverseValuesSum = sectorsData?.reduce((total, elem) => total + 1 / elem.value, 0);
-    let spinCount = 0;
+    const [spinCount, setSpinCount] = useState(0);
 
     useEffect(() => {
         if (canvasRef.current) {
@@ -113,7 +113,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     }
 
     const handleSpinButtonClick = () => {
-        if (isNeedRotateSpinIcon || isFreeSpins === null) return;
+        if (isNeedRotateSpinIcon || isFreeSpins === null) return; //
 
         if (!isFreeSpins) {
             updateBonusSpins();
@@ -154,14 +154,21 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     function twistWheel() {
         const randomSectorValue = randomSector();
         //@ts-ignore
-        const randomSectorCenter = oneSectorAngle * (randomSectorValue + 0.5);
+        const randomSectorCenter = -oneSectorAngle * (randomSectorValue + 0.5);
+        console.log(randomSectorCenter);
 
-        if (spinCount) beginTwistAngle = winAngle;
+        if (spinCount) setBeginTwistAngel(winAngle);
 
-        winAngle = -randomSectorCenter;
-        if (winAngle >= 1) winAngle--;
+        setSpinCount((prev) => prev++);
 
-        spinCount++;
+        setWinAngle(randomSectorCenter);
+        console.log(winAngle);
+
+        if (winAngle >= 1) setWinAngle((prev) => prev--);
+        if (winAngle < 0) setWinAngle((prev) => ++prev);
+
+        console.log(winAngle);
+
         animate({
             duration: 5000,
             timing: timing,
@@ -172,19 +179,13 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     function randomSector() {
         const randomNumber = Math.floor(Math.random() * 360) + 1; // 1...360
 
-        //@ts-ignore
-        let randomSector = sectorsData[0];
-
         for (let i = 0, upperBorder = 0; i < sectorsData.length; i++) {
             //@ts-ignore
             upperBorder += sectorsData[i].probability;
             if (randomNumber < upperBorder) {
                 // add score setter
                 updateTempWinScore(sectorsData?.[i]?.value);
-                //@ts-ignore
-                randomSector = sectorsData[i];
                 return i;
-                // break
             }
         }
     }
