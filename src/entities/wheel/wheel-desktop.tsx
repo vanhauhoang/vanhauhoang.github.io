@@ -21,7 +21,7 @@ const sectorsData = [
     { value: 50, colour: '#f6bd0d' },
     { value: 10, colour: '#10c569' },
     { value: 5, colour: '#0694d4' },
-];
+] as { value: number; colour: string; probability?: number }[];
 
 export const WheelDesktop = () => {
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });

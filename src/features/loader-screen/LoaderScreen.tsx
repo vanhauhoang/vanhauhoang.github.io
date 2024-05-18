@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect } from 'react';
+import { FC, ReactElement } from 'react';
 import { Heading } from '../../shared/components/heading';
 import { Loader } from '../../shared/components/loader/Loader';
 import { Logo } from '../../shared/components/logo';
