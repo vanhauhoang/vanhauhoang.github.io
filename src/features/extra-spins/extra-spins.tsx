@@ -1,19 +1,19 @@
-import { useMediaQuery } from 'react-responsive';
 import { Typography } from '../../shared/components/typography';
-import styles from './extra-spins.module.scss';
 import { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import timeIcon from '../../assets/images/time_icon.png';
 import { Button } from '../../shared/components/button';
 import { UserData } from '../../app/providers/AppContext';
 
+import styles from './extra-spins.module.scss';
+
 interface Props {
     userData: UserData | null;
+    isMobile: boolean;
 }
 
-export const ExtraSpins: FC<Props> = ({ userData }): ReactElement => {
+export const ExtraSpins: FC<Props> = ({ userData, isMobile }): ReactElement => {
     const navigate = useNavigate();
-    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
     const [rotateIcon, setRotateIcon] = useState<boolean>(false);
     const timeIconRef = useRef<HTMLImageElement>(null);
 
@@ -43,6 +43,7 @@ export const ExtraSpins: FC<Props> = ({ userData }): ReactElement => {
                         {userData?.spinsAvailable}
                     </Typography>
 
+                    {/*@ts-ignore */}
                     {userData?.spinsAvailable < 2 ? (
                         <div className={styles.app__extra_spins__free_spin__recharge}>
                             <img

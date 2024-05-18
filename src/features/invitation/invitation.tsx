@@ -1,14 +1,14 @@
-import { useMediaQuery } from 'react-responsive';
-import styles from './invitation.module.scss';
 import { FC, ReactElement } from 'react';
 import { Button } from '../../shared/components/button';
 import giftIcon from '../../assets/images/gift_icon.png';
 
-interface Props {}
+import styles from './invitation.module.scss';
 
-export const Invitation: FC<Props> = (): ReactElement => {
-    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+interface Props {
+    isMobile: boolean;
+}
 
+export const Invitation: FC<Props> = ({ isMobile }): ReactElement => {
     return (
         <div className={styles.app__invitation}>
             <Button

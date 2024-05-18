@@ -2,8 +2,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import MainPage from '../main/main';
 import BuyPage from '../buy/buy';
+import { FC, ReactElement } from 'react';
 
-export const Routing = () => {
+export const Routing: FC = (): ReactElement => {
     return (
         <BrowserRouter>
             <Routes>

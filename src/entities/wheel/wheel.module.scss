@@ -1,11 +1,16 @@
 .app {
     &__coin_icon_animation {
-        position: fixed;
+        position: absolute;
         width: 265px;
         top: 13.5%;
         z-index: 1;
         left: 50%;
         transform: translate(-50%, 0);
+
+        @media (min-width: 500px) {
+            width: 770px;
+            top: 12%;
+        }
     }
 
     &__spin {

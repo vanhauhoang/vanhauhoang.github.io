@@ -1,13 +1,16 @@
 import { Heading } from '../../shared/components/heading';
 import { Logo } from '../../shared/components/logo';
-import { useMediaQuery } from 'react-responsive';
 import { WheelMobile } from '../../entities/wheel/wheel-mobile';
 import { WheelDesktop } from '../../entities/wheel/wheel-desktop';
 
 import styles from './spin-template.module.scss';
+import { FC, ReactElement } from 'react';
 
-export const SpinTemplate = () => {
-    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+interface Props {
+    isMobile: boolean;
+}
+
+export const SpinTemplate: FC<Props> = ({ isMobile }): ReactElement => {
     return (
         <div className={styles.app__spin}>
             <div className={styles.app__title_and_logo}>

@@ -5,7 +5,6 @@ import { useAppContext } from '../../app/providers/AppContext';
 import soundWheel from '../../assets/sounds/Fortune-Prize-Wheel-01.mp3';
 import React from 'react';
 import { Typography } from '../../shared/components/typography';
-import { useMediaQuery } from 'react-responsive';
 
 import styles from './wheel.module.scss';
 import { LottieAnimation } from '../lottie-animation/lottie-animation';
@@ -24,11 +23,9 @@ const sectorsData = [
     { value: 50, colour: '#f6bd0d' },
     { value: 10, colour: '#10c569' },
     { value: 5, colour: '#0694d4' },
-] as any[];
+] as { value: number; colour: string; probability?: number }[];
 
 export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
-    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
-    //@ts-ignore
     const { isFreeSpins, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
     const [isDisplayAnimation, setIsDisplayAnimation] = useState<boolean>(false);
     const [isNeedRotateSpinIcon, setIsNeedRotateSpinIcon] = useState<boolean>(false);
@@ -114,6 +111,8 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     const handleSpinButtonClick = () => {
         if (isNeedRotateSpinIcon) return; //
 
+        if (isDisplayAnimation) setIsDisplayAnimation(false);
+
         if (!isFreeSpins) {
             updateBonusSpins();
         } else {
@@ -127,11 +126,15 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
         setTimeout(() => {
             setIsDisplayAnimation(true);
-        }, 7_000);
+        }, 5_500);
 
         setTimeout(() => {
             setIsNeedRotateSpinIcon(false);
         }, 8_000);
+
+        setTimeout(() => {
+            setIsDisplayAnimation(false);
+        }, 12_000);
     };
 
     function assignProbabilities(coeff = 360) {
@@ -383,11 +386,11 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
     return (
         <>
-            {isDisplayAnimation ? (
+            {isDisplayAnimation && (
                 <div className={styles.app__coin_icon_animation}>
-                    <LottieAnimation animationData={coinAnimation} loop={2} />
+                    <LottieAnimation animationData={coinAnimation} loop={0} autoplay={true} />
                 </div>
-            ) : null}
+            )}
             <audio ref={audioRef}>
                 <source src={soundWheel} type="audio/mpeg" />
                 Your browser does not support the audio element.
@@ -404,7 +407,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
                     className={`${styles.app__spin_button__loader} ${isNeedRotateSpinIcon ? styles.rotate : ''}`}
                     src={loaderIcon}
                 />
-                <Typography fontSize={isMobile ? '42px' : '120px'} fontFamily="Roundy Rainbows, sans-serif">
+                <Typography fontSize={'42px'} fontFamily="Roundy Rainbows, sans-serif">
                     SPin
                 </Typography>
             </div>

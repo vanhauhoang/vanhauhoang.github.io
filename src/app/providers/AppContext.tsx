@@ -1,6 +1,8 @@
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import LoaderScreen from '../../features/loader-screen/LoaderScreen';
-import { fetchUserById, spinWheelByUser } from '../../shared/components/api/user/thunks';
+import { fetchUserById, spinWheelByUser } from '../../shared/api/user/thunks';
+import { useMediaQuery } from 'react-responsive';
+import { GetCookie, removeAllCookies, SetCookie } from '../../shared/libs/cookies';
 
 // Define the shape of the user data
 export interface UserData {
@@ -21,6 +23,7 @@ export interface UserData {
 interface AppContextType {
     userData: UserData | null;
     isFreeSpins: boolean | null;
+    isMobile: boolean;
     updateFreeSpins: () => void;
     updateBonusSpins: (countSpins?: number) => void;
     updateTempWinScore: (score: number) => void;
@@ -39,11 +42,23 @@ export const useAppContext = () => {
 };
 
 export const AppContextProvider: React.FC<{ children: ReactElement | ReactElement[] }> = ({ children }) => {
+    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
     const [userData, setUserData] = useState<UserData | null>(null);
     const [loading, setIsLoading] = useState<boolean>(true);
     const [isFreeSpins, setIsFreeSpins] = useState<boolean | null>(false);
+    const isAppLoaded = GetCookie('app_loaded');
 
-    console.log('isFreeSpins', isFreeSpins);
+    useEffect(() => {
+        fetchUserById('1').then((res) => setUserData(res?.data));
+        setTimeout(() => {
+            setIsLoading(false);
+            SetCookie('app_loaded', 'true');
+        }, 4000);
+
+        return () => {
+            onExitFromApp();
+        };
+    }, []);
 
     useEffect(() => {
         //@ts-ignore
@@ -57,12 +72,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
         }
     }, [userData]);
 
-    useEffect(() => {
-        fetchUserById('1').then((res) => setUserData(res?.data));
-        setTimeout(() => setIsLoading(false), 4000);
-    }, []);
-
-    if (loading) {
+    if (loading && !isAppLoaded) {
         return <LoaderScreen />;
     }
 
@@ -105,8 +115,14 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
         }
     };
 
+    function onExitFromApp() {
+        removeAllCookies();
+    }
+
     return (
-        <AppContext.Provider value={{ userData, isFreeSpins, updateTempWinScore, updateFreeSpins, updateBonusSpins }}>
+        <AppContext.Provider
+            value={{ userData, isFreeSpins, isMobile, updateTempWinScore, updateFreeSpins, updateBonusSpins }}
+        >
             {children}
         </AppContext.Provider>
     );

@@ -1,4 +1,3 @@
-import { useMediaQuery } from 'react-responsive';
 import { FC, ReactElement } from 'react';
 import { Button } from '../../shared/components/button';
 import { Typography } from '../../shared/components/typography';
@@ -7,11 +6,10 @@ import styles from './footer.module.scss';
 
 interface Props {
     unclaimedTokens: number | undefined;
+    isMobile: boolean;
 }
 
-export const Footer: FC<Props> = ({ unclaimedTokens }): ReactElement => {
-    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
-
+export const Footer: FC<Props> = ({ unclaimedTokens, isMobile }): ReactElement => {
     return (
         <div className={styles.app__footer_connect}>
             <div className={styles.app__footer_connect_container}>

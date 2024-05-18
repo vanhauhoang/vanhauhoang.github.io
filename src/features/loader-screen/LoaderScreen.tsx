@@ -1,3 +1,4 @@
+import { FC, ReactElement, useEffect } from 'react';
 import { Heading } from '../../shared/components/heading';
 import { Loader } from '../../shared/components/loader/Loader';
 import { Logo } from '../../shared/components/logo';
@@ -5,7 +6,7 @@ import { Typography } from '../../shared/components/typography';
 
 import styles from './loader-screen.module.scss';
 
-const LoaderScreen = () => {
+const LoaderScreen: FC = (): ReactElement => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.container}>

@@ -4,7 +4,7 @@ import { Typography } from '../../shared/components/typography';
 import { Button } from '../../shared/components/button';
 import { useMediaQuery } from 'react-responsive';
 import { Flip, toast } from 'react-toastify';
-import { buySpinsByUser } from '../../shared/components/api/user/thunks';
+import { buySpinsByUser } from '../../shared/api/user/thunks';
 import { useAppContext } from '../../app/providers/AppContext';
 
 type BuyRow = {

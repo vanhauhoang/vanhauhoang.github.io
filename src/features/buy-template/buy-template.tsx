@@ -7,13 +7,14 @@ import { BuyTokenRow } from '../../entities/buy-token-row/but-token-row';
 import { Typography } from '../../shared/components/typography';
 import { Button } from '../../shared/components/button';
 import { useMediaQuery } from 'react-responsive';
+import { FC, ReactElement } from 'react';
 
-export const BuyTemplate = () => {
+export const BuyTemplate: FC = (): ReactElement => {
     const navigate = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
 
     const onNavigateToMainScreen = () => {
-        navigate('/whiskers');
+        navigate('/whiskers/');
     };
 
     return (

@@ -66,7 +66,7 @@ export const WheelDesktop = () => {
     const circleColour5 = '#f4f4f4';
     const circleColour6 = '#0594d3';
     const circleColourMicro = '#f4f4f4';
-    const textFontSize = 50;
+    const textFontSize = 72;
     const dpiTextFontSize = textFontSize * increaseCoeff;
     const textStyles = {
         fillColor: '#fff',
@@ -111,6 +111,8 @@ export const WheelDesktop = () => {
     const handleSpinButtonClick = () => {
         if (isNeedRotateSpinIcon) return; //
 
+        if (isDisplayAnimation) setIsDisplayAnimation(false);
+
         if (!isFreeSpins) {
             updateBonusSpins();
         } else {
@@ -124,11 +126,15 @@ export const WheelDesktop = () => {
 
         setTimeout(() => {
             setIsDisplayAnimation(true);
-        }, 7_000);
+        }, 5_500);
 
         setTimeout(() => {
             setIsNeedRotateSpinIcon(false);
         }, 8_000);
+
+        setTimeout(() => {
+            setIsDisplayAnimation(false);
+        }, 12_000);
     };
 
     function assignProbabilities(coeff = 360) {
@@ -336,7 +342,7 @@ export const WheelDesktop = () => {
     }
 
     function drawTriangle() {
-        const side = 20 * increaseCoeff;
+        const side = 110 * increaseCoeff;
         ctx.save();
 
         ctx.strokeStyle = '#f4f4f4';
@@ -345,9 +351,9 @@ export const WheelDesktop = () => {
         ctx.lineCap = 'round';
 
         ctx.beginPath();
-        ctx.moveTo(centerX + 140 * increaseCoeff, centerY);
-        ctx.lineTo(centerX + 140 * increaseCoeff + (side * Math.sqrt(3)) / 2, centerY + side / 2);
-        ctx.lineTo(centerX + 140 * increaseCoeff + (side * Math.sqrt(3)) / 2, centerY - side / 2);
+        ctx.moveTo(centerX + 400 * increaseCoeff, centerY);
+        ctx.lineTo(centerX + 400 * increaseCoeff + (side * Math.sqrt(3)) / 2, centerY + side / 2);
+        ctx.lineTo(centerX + 400 * increaseCoeff + (side * Math.sqrt(3)) / 2, centerY - side / 2);
 
         ctx.closePath();
         ctx.stroke();
@@ -398,11 +404,11 @@ export const WheelDesktop = () => {
 
     return (
         <>
-            {isDisplayAnimation ? (
+            {isDisplayAnimation && (
                 <div className={styles.app__coin_icon_animation}>
-                    <LottieAnimation animationData={coinAnimation} loop={2} />
+                    <LottieAnimation animationData={coinAnimation} loop={0} autoplay={true} />
                 </div>
-            ) : null}
+            )}
             <audio ref={audioRef}>
                 <source src={soundWheel} type="audio/mpeg" />
                 Your browser does not support the audio element.
