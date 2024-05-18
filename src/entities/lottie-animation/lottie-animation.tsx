@@ -1,6 +1,5 @@
 import Lottie from 'lottie-react';
-import { FC, ReactElement, useEffect, useRef } from 'react';
-import { AnimationItem } from 'lottie-web';
+import { FC, ReactElement } from 'react';
 
 type Props = {
     animationData: any;
@@ -8,8 +7,6 @@ type Props = {
 };
 
 export const LottieAnimation: FC<Props> = ({ animationData, loop }): ReactElement => {
-    const lottieRef = useRef<any>(null);
-
-    return <Lottie animationData={animationData} loop={loop} ref={lottieRef} />;
+    return <Lottie animationData={animationData} loop={loop} />;
 };
 

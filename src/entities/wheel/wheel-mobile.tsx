@@ -76,7 +76,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
         fillColor: '#fff',
         textFont: `${dpiTextFontSize}px Roundy Rainbows, sans-serif`,
     };
-    const turns = 2; //number of turns for one spin
+    const turns = 4; //number of turns for one spin
     const oneSectorAngle = 1 / sectorsData.length;
     const inverseValuesSum = sectorsData?.reduce((total, elem) => total + 1 / elem.value, 0);
 
@@ -108,7 +108,6 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     }, [imageLoaded, ctx]);
 
     function InitializeWheel() {
-        console.log('Initializing wheel i render');
         drawWheel(beginTwistAngleRef.current, sectorsData);
     }
 
@@ -158,36 +157,18 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
     function twistWheel() {
         const randomSectorValue = randomSector();
-        console.log('randomSectorValue:', randomSectorValue);
 
         //@ts-ignore
         const randomSectorCenter = -(oneSectorAngle * (randomSectorValue + 0.5)).toFixed(4);
-        console.log('randomSectorValue:', randomSectorCenter);
-        console.log(
-            'beginTwistAngleRef.current, winAngleRef.current --- FIRST:',
-            beginTwistAngleRef.current,
-            winAngleRef.current,
-        );
 
         if (spinCountRef.current) beginTwistAngleRef.current = winAngleRef.current;
 
         spinCountRef.current++;
 
         winAngleRef.current = randomSectorCenter;
-        console.log(
-            'beginTwistAngleRef.current, winAngleRef.current --- SECOND:',
-            beginTwistAngleRef.current,
-            winAngleRef.current,
-        );
 
         if (winAngleRef.current >= 1) winAngleRef.current--;
         if (winAngleRef.current < 0) winAngleRef.current++;
-
-        console.log(
-            'beginTwistAngleRef.current, winAngleRef.current --- THIRD:',
-            beginTwistAngleRef.current,
-            winAngleRef.current,
-        );
 
         animate({
             duration: 5000,
@@ -205,7 +186,6 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
             if (randomNumber < upperBorder) {
                 // add score setter
                 updateTempWinScore(sectorsData?.[i]?.value);
-                console.log('win score', sectorsData?.[i]);
                 return i;
             }
         }
@@ -249,8 +229,6 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
     //@ts-ignore
     function drawWheel(beginAngle, sectorsData) {
-        console.log('DRAW WHEEL - i render');
-
         drawOuterWheelPart();
         drawMiddleWheelPart(beginAngle, sectorsData);
         drawInnerWheelPart();
@@ -278,7 +256,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     function drawMiddleWheelPart(beginAngle, sectorsData) {
         let currentAngle = beginAngle;
         //@ts-ignore
-        sectorsData.map((sector) => {
+        sectorsData?.map((sector) => {
             drawWholeSector(
                 radius2,
                 radiusText,
