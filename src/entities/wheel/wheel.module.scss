@@ -1,4 +1,13 @@
 .app {
+    &__coin_icon_animation {
+        position: fixed;
+        width: 265px;
+        top: 13.5%;
+        z-index: 1;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+
     &__spin {
         width: 100%;
         padding: 20px 10px 10px 10px;
@@ -14,7 +23,7 @@
 
         &_button {
             position: absolute;
-            bottom: -5%;
+            bottom: -4%;
             left: 50%;
             transform: translateX(-50%);
             width: fit-content;
@@ -46,3 +55,13 @@
         }
     }
 }
+
+@keyframes spin {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+

@@ -17,13 +17,13 @@ const MainApp: FC = (): ReactElement => {
     //@ts-ignore
     const { userData, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setRotateIcon((prevRotate) => !prevRotate);
-        }, 5000);
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         setRotateIcon((prevRotate) => !prevRotate);
+    //     }, 5000);
 
-        return () => clearInterval(interval);
-    }, []);
+    //     return () => clearInterval(interval);
+    // }, []);
 
     const onNavigateToBuyPage = () => {
         navigate('/whiskers/buy');
@@ -32,7 +32,6 @@ const MainApp: FC = (): ReactElement => {
     return (
         <div className={styles.app__wrapper}>
             <div className={styles.app__container}>
-                {/* Spin Template */}
                 <SpinTemplate />
                 <div className={styles.app__extra_spins}>
                     <div className={styles.app__extra_spins__free_spin}>
@@ -99,7 +98,7 @@ const MainApp: FC = (): ReactElement => {
                     <Button
                         imageLeft={giftIcon}
                         fontFamily={'Montserrat, sans-serif'}
-                        height={isMobile ? '80px' : '200px'}
+                        height={isMobile ? '65px' : '200px'}
                         textTransform={'none'}
                         text={'Refer A Friend'}
                         subText={'Get 3 bonus spins'}

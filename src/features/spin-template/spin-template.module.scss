@@ -9,7 +9,7 @@
 
     &__title_and_logo {
         position: absolute;
-        top: -11%;
+        top: -14%;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
@@ -24,7 +24,7 @@
 
     &__spin {
         width: 100%;
-        padding: 20px 10px 10px 10px;
+        padding: 10px 10px 10px 10px;
         position: relative;
         display: flex;
         justify-content: center;
@@ -37,7 +37,7 @@
 
         &_button {
             position: absolute;
-            bottom: -5%;
+            bottom: -3%;
             left: 50%;
             transform: translateX(-50%);
             width: fit-content;
@@ -52,7 +52,7 @@
 
             @media screen and (max-width: 500px) {
                 width: 180px;
-                height: 70px;
+                height: 60px;
             }
 
             &__loader {

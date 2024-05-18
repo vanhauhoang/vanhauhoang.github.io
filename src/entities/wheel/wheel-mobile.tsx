@@ -8,31 +8,35 @@ import { Typography } from '../../shared/components/typography';
 import { useMediaQuery } from 'react-responsive';
 
 import styles from './wheel.module.scss';
+import { LottieAnimation } from '../lottie-animation/lottie-animation';
+import coinAnimation from '../../assets/animations/coin-dollar.json';
 
 interface WheelMobileProps {}
 
+const sectorsData = [
+    { value: 10, colour: '#10c569' },
+    { value: 5, colour: '#0694d4' },
+    { value: 100, colour: '#f34a3a' },
+    { value: 50, colour: '#f6bd0d' },
+    { value: 10, colour: '#10c569' },
+    { value: 5, colour: '#0694d4' },
+    { value: 100, colour: '#f34a3a' },
+    { value: 50, colour: '#f6bd0d' },
+    { value: 10, colour: '#10c569' },
+    { value: 5, colour: '#0694d4' },
+] as any[];
+
 export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    //@ts-ignore
     const { isFreeSpins, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
+    const [isDisplayAnimation, setIsDisplayAnimation] = useState<boolean>(false);
     const [isNeedRotateSpinIcon, setIsNeedRotateSpinIcon] = useState<boolean>(false);
     const audioRef = React.createRef<any>();
     const [imageLoaded, setImageLoaded] = useState(false);
     const image = useRef(new Image());
     const canvasRef = useRef<any>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | any>(null);
-
-    const sectorsData = [
-        { value: 10, colour: '#10c569' },
-        { value: 5, colour: '#0694d4' },
-        { value: 100, colour: '#f34a3a' },
-        { value: 50, colour: '#f6bd0d' },
-        { value: 10, colour: '#10c569' },
-        { value: 5, colour: '#0694d4' },
-        { value: 100, colour: '#f34a3a' },
-        { value: 50, colour: '#f6bd0d' },
-        { value: 10, colour: '#10c569' },
-        { value: 5, colour: '#0694d4' },
-    ];
 
     //constants
     const increaseCoeff = 4; //for canvas better quality
@@ -72,33 +76,13 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
         fillColor: '#fff',
         textFont: `${dpiTextFontSize}px Roundy Rainbows, sans-serif`,
     };
-    const [beginTwistAngle, setBeginTwistAngel] = useState(0.25); //changes after every spin
     const turns = 2; //number of turns for one spin
-    const [winAngle, setWinAngle] = useState(0);
     const oneSectorAngle = 1 / sectorsData.length;
     const inverseValuesSum = sectorsData?.reduce((total, elem) => total + 1 / elem.value, 0);
-    const [spinCount, setSpinCount] = useState(0);
 
-    useEffect(() => {
-        if (canvasRef.current) {
-            const context = canvasRef.current.getContext('2d');
-            if (context) {
-                setCtx(context);
-            }
-        }
-    }, []);
-
-    useEffect(() => {
-        if (canvasRef?.current) {
-            if (ctx) {
-                canvasRef.current.width = dpiWidth;
-                canvasRef.current.height = dpiHeight;
-                canvasRef.current.style.width = width + 'px';
-                canvasRef.current.style.height = height + 'px';
-                InitializeWheel(); // Initialize the wheel
-            }
-        }
-    }, [imageLoaded, ctx, dpiWidth, dpiHeight, InitializeWheel]);
+    const beginTwistAngleRef = useRef(-0.25);
+    const winAngleRef = useRef(0);
+    const spinCountRef = useRef(0);
 
     useEffect(() => {
         image.current.onload = () => {
@@ -107,13 +91,29 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
         image.current.src = kitty;
     }, []);
 
-    function InitializeWheel() {
+    useEffect(() => {
+        if (canvasRef.current) {
+            const context = canvasRef.current.getContext('2d');
+            if (context) {
+                setCtx(context);
+            }
+        }
         assignProbabilities();
-        drawWheel(beginTwistAngle, sectorsData);
+    }, []);
+
+    useEffect(() => {
+        if (canvasRef.current && imageLoaded && ctx) {
+            InitializeWheel();
+        }
+    }, [imageLoaded, ctx]);
+
+    function InitializeWheel() {
+        console.log('Initializing wheel i render');
+        drawWheel(beginTwistAngleRef.current, sectorsData);
     }
 
     const handleSpinButtonClick = () => {
-        if (isNeedRotateSpinIcon || isFreeSpins === null) return; //
+        if (isNeedRotateSpinIcon) return; //
 
         if (!isFreeSpins) {
             updateBonusSpins();
@@ -124,8 +124,11 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
         twistWheel();
 
         setIsNeedRotateSpinIcon(true);
-
         audioRef.current.play();
+
+        setTimeout(() => {
+            setIsDisplayAnimation(true);
+        }, 7_000);
 
         setTimeout(() => {
             setIsNeedRotateSpinIcon(false);
@@ -133,6 +136,8 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     };
 
     function assignProbabilities(coeff = 360) {
+        if (sectorsData?.[0]?.probability) return;
+
         //probabilities sum will might be equal to 1, so the remainder part will be added to the smallest value
         let wholeProbabilityRemainder = coeff;
         let minValueSectorIndex = 0;
@@ -153,21 +158,36 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
     function twistWheel() {
         const randomSectorValue = randomSector();
+        console.log('randomSectorValue:', randomSectorValue);
+
         //@ts-ignore
-        const randomSectorCenter = -oneSectorAngle * (randomSectorValue + 0.5);
-        console.log(randomSectorCenter);
+        const randomSectorCenter = -(oneSectorAngle * (randomSectorValue + 0.5)).toFixed(4);
+        console.log('randomSectorValue:', randomSectorCenter);
+        console.log(
+            'beginTwistAngleRef.current, winAngleRef.current --- FIRST:',
+            beginTwistAngleRef.current,
+            winAngleRef.current,
+        );
 
-        if (spinCount) setBeginTwistAngel(winAngle);
+        if (spinCountRef.current) beginTwistAngleRef.current = winAngleRef.current;
 
-        setSpinCount((prev) => prev++);
+        spinCountRef.current++;
 
-        setWinAngle(randomSectorCenter);
-        console.log(winAngle);
+        winAngleRef.current = randomSectorCenter;
+        console.log(
+            'beginTwistAngleRef.current, winAngleRef.current --- SECOND:',
+            beginTwistAngleRef.current,
+            winAngleRef.current,
+        );
 
-        if (winAngle >= 1) setWinAngle((prev) => prev--);
-        if (winAngle < 0) setWinAngle((prev) => ++prev);
+        if (winAngleRef.current >= 1) winAngleRef.current--;
+        if (winAngleRef.current < 0) winAngleRef.current++;
 
-        console.log(winAngle);
+        console.log(
+            'beginTwistAngleRef.current, winAngleRef.current --- THIRD:',
+            beginTwistAngleRef.current,
+            winAngleRef.current,
+        );
 
         animate({
             duration: 5000,
@@ -179,32 +199,39 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
     function randomSector() {
         const randomNumber = Math.floor(Math.random() * 360) + 1; // 1...360
 
-        for (let i = 0, upperBorder = 0; i < sectorsData.length; i++) {
+        for (let i = 0, upperBorder = 0; i < sectorsData?.length; i++) {
             //@ts-ignore
-            upperBorder += sectorsData[i].probability;
+            upperBorder += sectorsData?.[i]?.probability;
             if (randomNumber < upperBorder) {
                 // add score setter
                 updateTempWinScore(sectorsData?.[i]?.value);
+                console.log('win score', sectorsData?.[i]);
                 return i;
             }
         }
     }
+
     //@ts-ignore
     function animate({ timing, duration }) {
         const start = performance.now();
-        requestAnimationFrame(function animate(time) {
+        const raf = requestAnimationFrame(function animate(time) {
             // timeFraction from 0 to 1
             let timeFraction = (time - start) / duration;
             if (timeFraction > 1) timeFraction = 1;
 
-            const progress = beginTwistAngle + timing(timeFraction) * (-beginTwistAngle + winAngle + turns);
+            const progress =
+                beginTwistAngleRef.current +
+                timing(timeFraction) * (-beginTwistAngleRef.current + winAngleRef.current + turns);
             redrawWheel(progress);
 
             if (timeFraction < 1) {
                 requestAnimationFrame(animate);
+            } else {
+                cancelAnimationFrame(raf);
             }
         });
     }
+
     //@ts-ignore
     function timing(timeFraction) {
         if (timeFraction < 0.25) {
@@ -213,13 +240,17 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
             return Math.pow(timeFraction, 1 / 2);
         }
     }
+
     //@ts-ignore
     function redrawWheel(beginTwistAngle) {
         ctx.clearRect(0, 0, dpiWidth, dpiHeight);
         drawWheel(beginTwistAngle, sectorsData);
     }
+
     //@ts-ignore
     function drawWheel(beginAngle, sectorsData) {
+        console.log('DRAW WHEEL - i render');
+
         drawOuterWheelPart();
         drawMiddleWheelPart(beginAngle, sectorsData);
         drawInnerWheelPart();
@@ -242,6 +273,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
             circleColourMicro,
         );
     }
+
     //@ts-ignore
     function drawMiddleWheelPart(beginAngle, sectorsData) {
         let currentAngle = beginAngle;
@@ -267,6 +299,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
         drawCircleBorder(centerX, centerY, radius6, radius5, circleColour5);
         drawCircle(centerX, centerY, radius6, circleColour6);
     }
+
     //@ts-ignore
     function drawCircleBorder(centerX, centerY, radiusExternal, radiusInternal, colour) {
         ctx.save();
@@ -280,6 +313,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
         ctx.restore();
     }
+
     //@ts-ignore
     function drawCircle(centerX, centerY, radius, colour) {
         ctx.save();
@@ -292,6 +326,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
         ctx.restore();
     }
+
     //@ts-ignore
     function drawPointsOnCircle(circleCenterX, circleCenterY, circleRadius, pointRadius, angle, colour) {
         let centerX, centerY;
@@ -327,6 +362,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
         ctx.restore();
     }
+
     //@ts-ignore
     function drawWholeSector(radius, radiusText, startAnglePart, endAnglePart, sectorFillColor, text) {
         const startAngle = startAnglePart * 2 * Math.PI;
@@ -350,6 +386,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
         ctx.restore();
     }
+
     //@ts-ignore
     function drawSectorText(middleAngle, radius, text) {
         ctx.save();
@@ -365,13 +402,25 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
 
         ctx.restore();
     }
+
     return (
         <>
+            {isDisplayAnimation ? (
+                <div className={styles.app__coin_icon_animation}>
+                    <LottieAnimation animationData={coinAnimation} loop={2} />
+                </div>
+            ) : null}
             <audio ref={audioRef}>
                 <source src={soundWheel} type="audio/mpeg" />
                 Your browser does not support the audio element.
             </audio>
-            <canvas ref={canvasRef} id="canvas" />
+            <canvas
+                ref={canvasRef}
+                width={dpiWidth}
+                height={dpiHeight}
+                style={{ width: `${width}px`, height: `${height}px` }}
+                id="canvas"
+            />
             <div onClick={handleSpinButtonClick} className={styles.app__spin_button}>
                 <img
                     className={`${styles.app__spin_button__loader} ${isNeedRotateSpinIcon ? styles.rotate : ''}`}
