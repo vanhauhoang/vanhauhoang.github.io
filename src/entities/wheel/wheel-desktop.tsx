@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import kitty from '../../assets/images/kitty.png';
 import { useAppContext } from '../../app/providers/AppContext';
 import { useMediaQuery } from 'react-responsive';
@@ -23,7 +23,13 @@ const sectorsData = [
     { value: 5, colour: '#0694d4' },
 ] as { value: number; colour: string; probability?: number }[];
 
-export const WheelDesktop = () => {
+interface WheelDesktopProps {
+    isAvailableToSpin: boolean;
+}
+
+export const WheelDesktop: FC<WheelDesktopProps> = ({ isAvailableToSpin }): ReactElement => {
+    console.log('isAvailableToSpin', isAvailableToSpin);
+
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
     const { isFreeSpins, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
     const [isNeedRotateSpinIcon, setIsNeedRotateSpinIcon] = useState<boolean>(false);
@@ -86,9 +92,7 @@ export const WheelDesktop = () => {
             setImageLoaded(true);
         };
         image.current.src = kitty;
-    }, []);
 
-    useEffect(() => {
         if (canvasRef.current) {
             const context = canvasRef.current.getContext('2d');
             if (context) {
@@ -96,6 +100,10 @@ export const WheelDesktop = () => {
             }
         }
         assignProbabilities();
+
+        return () => {
+            cleanUpFunc();
+        };
     }, []);
 
     useEffect(() => {
@@ -104,12 +112,20 @@ export const WheelDesktop = () => {
         }
     }, [imageLoaded, ctx]);
 
+    function cleanUpFunc() {
+        if (audioRef.current) {
+            audioRef.current.pause();
+        }
+        setIsDisplayAnimation(false);
+        setIsNeedRotateSpinIcon(false);
+    }
+
     function InitializeWheel() {
         drawWheel(beginTwistAngleRef.current, sectorsData);
     }
 
     const handleSpinButtonClick = () => {
-        if (isNeedRotateSpinIcon) return; //
+        if (isNeedRotateSpinIcon || !isAvailableToSpin) return; //
 
         if (isDisplayAnimation) setIsDisplayAnimation(false);
 
@@ -420,7 +436,10 @@ export const WheelDesktop = () => {
                 style={{ width: `${width}px`, height: `${height}px` }}
                 id="canvas"
             />
-            <div onClick={handleSpinButtonClick} className={styles.app__spin_button}>
+            <div
+                onClick={handleSpinButtonClick}
+                className={`${styles.app__spin_button} ${!isAvailableToSpin || isNeedRotateSpinIcon ? styles.disable : ''}`}
+            >
                 <img
                     className={`${styles.app__spin_button__loader} ${isNeedRotateSpinIcon ? styles.rotate : ''}`}
                     src={loaderIcon}

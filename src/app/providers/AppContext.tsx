@@ -1,6 +1,6 @@
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import LoaderScreen from '../../features/loader-screen/LoaderScreen';
-import { fetchUserById, spinWheelByUser } from '../../shared/api/user/thunks';
+import { fetchUserById, loginUser, spinWheelByUser } from '../../shared/api/user/thunks';
 import { useMediaQuery } from 'react-responsive';
 import { GetCookie, removeAllCookies, SetCookie } from '../../shared/libs/cookies';
 
@@ -24,6 +24,7 @@ interface AppContextType {
     userData: UserData | null;
     isFreeSpins: boolean | null;
     isMobile: boolean;
+    isAvailableToSpin: boolean;
     updateFreeSpins: () => void;
     updateBonusSpins: (countSpins?: number) => void;
     updateTempWinScore: (score: number) => void;
@@ -46,9 +47,19 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     const [userData, setUserData] = useState<UserData | null>(null);
     const [loading, setIsLoading] = useState<boolean>(true);
     const [isFreeSpins, setIsFreeSpins] = useState<boolean | null>(false);
+    const [isAvailableToSpin, setIsAvailableToSpin] = useState<boolean>(false);
     const isAppLoaded = GetCookie('app_loaded');
 
     useEffect(() => {
+        if (userData?.spinsAvailable === 0 && userData?.bonusSpins === 0) {
+            setIsAvailableToSpin(false);
+        } else {
+            setIsAvailableToSpin(true);
+        }
+    }, [userData?.bonusSpins, userData?.spinsAvailable]);
+
+    useEffect(() => {
+        loginUser('1').then((res) => console.log('login user res', res));
         fetchUserById('1').then((res) => setUserData(res?.data));
         setTimeout(() => {
             setIsLoading(false);
@@ -121,7 +132,15 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
 
     return (
         <AppContext.Provider
-            value={{ userData, isFreeSpins, isMobile, updateTempWinScore, updateFreeSpins, updateBonusSpins }}
+            value={{
+                userData,
+                isFreeSpins,
+                isAvailableToSpin,
+                isMobile,
+                updateTempWinScore,
+                updateFreeSpins,
+                updateBonusSpins,
+            }}
         >
             {children}
         </AppContext.Provider>

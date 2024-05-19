@@ -8,9 +8,10 @@ import { FC, ReactElement } from 'react';
 
 interface Props {
     isMobile: boolean;
+    isAvailableToSpin: boolean;
 }
 
-export const SpinTemplate: FC<Props> = ({ isMobile }): ReactElement => {
+export const SpinTemplate: FC<Props> = ({ isMobile, isAvailableToSpin }): ReactElement => {
     return (
         <div className={styles.app__spin}>
             <div className={styles.app__title_and_logo}>
@@ -21,7 +22,11 @@ export const SpinTemplate: FC<Props> = ({ isMobile }): ReactElement => {
                     </Heading>
                 </span>
             </div>
-            {isMobile ? <WheelMobile /> : <WheelDesktop />}
+            {isMobile ? (
+                <WheelMobile isAvailableToSpin={isAvailableToSpin} />
+            ) : (
+                <WheelDesktop isAvailableToSpin={isAvailableToSpin} />
+            )}
         </div>
     );
 };

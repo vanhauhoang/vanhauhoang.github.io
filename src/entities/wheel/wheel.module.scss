@@ -57,6 +57,12 @@
             .rotate {
                 animation: spin 2s linear forwards;
             }
+
+            &.disable {
+                cursor: not-allowed;
+                background-color: #2a2a36;
+                opacity: 0.8;
+            }
         }
     }
 }

@@ -10,7 +10,9 @@ import styles from './wheel.module.scss';
 import { LottieAnimation } from '../lottie-animation/lottie-animation';
 import coinAnimation from '../../assets/animations/coin-dollar.json';
 
-interface WheelMobileProps {}
+interface WheelMobileProps {
+    isAvailableToSpin: boolean;
+}
 
 const sectorsData = [
     { value: 10, colour: '#10c569' },
@@ -25,11 +27,11 @@ const sectorsData = [
     { value: 5, colour: '#0694d4' },
 ] as { value: number; colour: string; probability?: number }[];
 
-export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
+export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin }): ReactElement => {
     const { isFreeSpins, updateFreeSpins, updateBonusSpins, updateTempWinScore } = useAppContext();
     const [isDisplayAnimation, setIsDisplayAnimation] = useState<boolean>(false);
     const [isNeedRotateSpinIcon, setIsNeedRotateSpinIcon] = useState<boolean>(false);
-    const audioRef = React.createRef<any>();
+    const audioRef = useRef<any>(null);
     const [imageLoaded, setImageLoaded] = useState(false);
     const image = useRef(new Image());
     const canvasRef = useRef<any>(null);
@@ -86,9 +88,7 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
             setImageLoaded(true);
         };
         image.current.src = kitty;
-    }, []);
 
-    useEffect(() => {
         if (canvasRef.current) {
             const context = canvasRef.current.getContext('2d');
             if (context) {
@@ -96,6 +96,10 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
             }
         }
         assignProbabilities();
+
+        return () => {
+            cleanUpFunc();
+        };
     }, []);
 
     useEffect(() => {
@@ -104,12 +108,20 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
         }
     }, [imageLoaded, ctx]);
 
+    function cleanUpFunc() {
+        if (audioRef.current) {
+            audioRef.current.pause();
+        }
+        setIsDisplayAnimation(false);
+        setIsNeedRotateSpinIcon(false);
+    }
+
     function InitializeWheel() {
         drawWheel(beginTwistAngleRef.current, sectorsData);
     }
 
     const handleSpinButtonClick = () => {
-        if (isNeedRotateSpinIcon) return; //
+        if (isNeedRotateSpinIcon || !isAvailableToSpin) return; //
 
         if (isDisplayAnimation) setIsDisplayAnimation(false);
 
@@ -402,7 +414,10 @@ export const WheelMobile: FC<WheelMobileProps> = (): ReactElement => {
                 style={{ width: `${width}px`, height: `${height}px` }}
                 id="canvas"
             />
-            <div onClick={handleSpinButtonClick} className={styles.app__spin_button}>
+            <div
+                onClick={handleSpinButtonClick}
+                className={`${styles.app__spin_button} ${!isAvailableToSpin || isNeedRotateSpinIcon ? styles.disable : ''}`}
+            >
                 <img
                     className={`${styles.app__spin_button__loader} ${isNeedRotateSpinIcon ? styles.rotate : ''}`}
                     src={loaderIcon}

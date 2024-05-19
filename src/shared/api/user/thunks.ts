@@ -1,5 +1,14 @@
 import { userApi } from './user';
 
+export const loginUser = async (userId: string) => {
+    try {
+        const res = await userApi.loginUser(userId);
+        return res.data;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 export const fetchUserById = async (userId: string) => {
     try {
         const res = await userApi.getUserInfoById(userId);
