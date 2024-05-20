@@ -1,6 +1,6 @@
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import LoaderScreen from '../../features/loader-screen/LoaderScreen';
-import { fetchUserById, loginUser, spinWheelByUser } from '../../shared/api/user/thunks';
+import { loginUser, spinWheelByUser } from '../../shared/api/user/thunks';
 import { useMediaQuery } from 'react-responsive';
 import { GetCookie, removeAllCookies, SetCookie } from '../../shared/libs/cookies';
 
