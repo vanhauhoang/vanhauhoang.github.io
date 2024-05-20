@@ -14,7 +14,11 @@ const MainApp: FC = (): ReactElement => {
     return (
         <div className={styles.app__wrapper}>
             <div className={styles.app__container}>
-                <SpinTemplate isAvailableToSpin={isAvailableToSpin} isMobile={isMobile} />
+                <SpinTemplate
+                    isUserLoggedIn={!!userData?.userId}
+                    isAvailableToSpin={isAvailableToSpin}
+                    isMobile={isMobile}
+                />
                 <ExtraSpins isMobile={isMobile} userData={userData} />
                 <Invitation isMobile={isMobile} />
                 <div>

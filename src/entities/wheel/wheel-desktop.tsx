@@ -9,6 +9,7 @@ import { Typography } from '../../shared/components/typography';
 import React from 'react';
 import { LottieAnimation } from '../lottie-animation/lottie-animation';
 import coinAnimation from '../../assets/animations/coin-dollar.json';
+import { Flip, toast } from 'react-toastify';
 
 const sectorsData = [
     { value: 10, colour: '#10c569' },
@@ -25,9 +26,10 @@ const sectorsData = [
 
 interface WheelDesktopProps {
     isAvailableToSpin: boolean;
+    isUserLoggedIn: boolean;
 }
 
-export const WheelDesktop: FC<WheelDesktopProps> = ({ isAvailableToSpin }): ReactElement => {
+export const WheelDesktop: FC<WheelDesktopProps> = ({ isAvailableToSpin, isUserLoggedIn }): ReactElement => {
     console.log('isAvailableToSpin', isAvailableToSpin);
 
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
@@ -125,32 +127,46 @@ export const WheelDesktop: FC<WheelDesktopProps> = ({ isAvailableToSpin }): Reac
     }
 
     const handleSpinButtonClick = () => {
-        if (isNeedRotateSpinIcon || !isAvailableToSpin) return; //
+        if (isUserLoggedIn) {
+            if (isNeedRotateSpinIcon || !isAvailableToSpin) return; //
 
-        if (isDisplayAnimation) setIsDisplayAnimation(false);
+            if (isDisplayAnimation) setIsDisplayAnimation(false);
 
-        if (!isFreeSpins) {
-            updateBonusSpins();
+            if (!isFreeSpins) {
+                updateBonusSpins();
+            } else {
+                updateFreeSpins();
+            }
+
+            twistWheel();
+
+            setIsNeedRotateSpinIcon(true);
+            audioRef.current.play();
+
+            setTimeout(() => {
+                setIsDisplayAnimation(true);
+            }, 5_500);
+
+            setTimeout(() => {
+                setIsNeedRotateSpinIcon(false);
+            }, 8_000);
+
+            setTimeout(() => {
+                setIsDisplayAnimation(false);
+            }, 12_000);
         } else {
-            updateFreeSpins();
+            toast.error(`Cannot spin it`, {
+                position: 'bottom-left',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+                transition: Flip,
+            });
         }
-
-        twistWheel();
-
-        setIsNeedRotateSpinIcon(true);
-        audioRef.current.play();
-
-        setTimeout(() => {
-            setIsDisplayAnimation(true);
-        }, 5_500);
-
-        setTimeout(() => {
-            setIsNeedRotateSpinIcon(false);
-        }, 8_000);
-
-        setTimeout(() => {
-            setIsDisplayAnimation(false);
-        }, 12_000);
     };
 
     function assignProbabilities(coeff = 360) {

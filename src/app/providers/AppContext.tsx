@@ -112,24 +112,30 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
         }, 4000);
     }, [userData?.spinsAvailable, userData?.bonusSpins]);
 
-    if (loading && !isAppLoaded) {
+    if (!tg?.Telegram) {
+        return <p>You are not in telegram enviroment</p>;
+    }
+
+    if (loading && !isAppLoaded && tg?.Telegram) {
         return <LoaderScreen />;
     }
 
     const updateTempWinScore = (score: number) => {
-        spinWheelByUser('1', {
-            winScore: score,
-            isFreeSpin: isFreeSpins,
-        }).then((res) => {
-            if (res && res.status && res?.status === 200) {
-                setTimeout(() => {
-                    setUserData((prevUserData: any) => ({
-                        ...prevUserData,
-                        unclaimedTokens: prevUserData.unclaimedTokens + score,
-                    }));
-                }, 7_000);
-            }
-        });
+        if (userData?.userId) {
+            spinWheelByUser(userData?.userId, {
+                winScore: score,
+                isFreeSpin: isFreeSpins,
+            }).then((res) => {
+                if (res && res.status && res?.status === 200) {
+                    setTimeout(() => {
+                        setUserData((prevUserData: any) => ({
+                            ...prevUserData,
+                            unclaimedTokens: prevUserData.unclaimedTokens + score,
+                        }));
+                    }, 7_000);
+                }
+            });
+        }
     };
 
     const updateFreeSpins = () => {

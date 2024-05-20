@@ -9,9 +9,10 @@ import { FC, ReactElement } from 'react';
 interface Props {
     isMobile: boolean;
     isAvailableToSpin: boolean;
+    isUserLoggedIn: boolean;
 }
 
-export const SpinTemplate: FC<Props> = ({ isMobile, isAvailableToSpin }): ReactElement => {
+export const SpinTemplate: FC<Props> = ({ isMobile, isAvailableToSpin, isUserLoggedIn }): ReactElement => {
     return (
         <div className={styles.app__spin}>
             <div className={styles.app__title_and_logo}>
@@ -23,9 +24,9 @@ export const SpinTemplate: FC<Props> = ({ isMobile, isAvailableToSpin }): ReactE
                 </span>
             </div>
             {isMobile ? (
-                <WheelMobile isAvailableToSpin={isAvailableToSpin} />
+                <WheelMobile isUserLoggedIn={isUserLoggedIn} isAvailableToSpin={isAvailableToSpin} />
             ) : (
-                <WheelDesktop isAvailableToSpin={isAvailableToSpin} />
+                <WheelDesktop isUserLoggedIn={isUserLoggedIn} isAvailableToSpin={isAvailableToSpin} />
             )}
         </div>
     );
