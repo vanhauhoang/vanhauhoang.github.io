@@ -16,7 +16,16 @@ const MainApp: FC = (): ReactElement => {
                 <SpinTemplate isAvailableToSpin={isAvailableToSpin} isMobile={isMobile} />
                 <ExtraSpins isMobile={isMobile} userData={userData} />
                 <Invitation isMobile={isMobile} />
-                {tgUser ? <p>TG user id: {tgUser.id}</p> : null}
+                <div>
+                    <h1>Telegram Web App</h1>
+                    {tgUser ? (
+                        <p>
+                            Welcome, {tgUser.first_name} {tgUser.last_name}
+                        </p>
+                    ) : (
+                        <p>Loading...</p>
+                    )}
+                </div>
                 <Footer isMobile={isMobile} unclaimedTokens={userData?.unclaimedTokens} />
             </div>
         </div>

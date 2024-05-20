@@ -61,21 +61,21 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     }, [userData?.bonusSpins, userData?.spinsAvailable]);
 
     useEffect(() => {
-        //@ts-ignore
-        console.log('window?.Telegram?.WebApp', window?.Telegram?.WebApp);
+        console.log('Checking Telegram WebApp initialization');
 
         //@ts-ignore
-        if (window?.Telegram?.WebApp) {
+        if (window.Telegram && window.Telegram.WebApp) {
             //@ts-ignore
             const tg = window.Telegram.WebApp;
             tg.ready();
 
             // Get user data from the Telegram Web App context
             const user = tg.initDataUnsafe.user;
-
             setTgUser(user);
 
-            console.log('user from tg', user);
+            console.log('User from Telegram:', user);
+        } else {
+            console.error('Telegram WebApp is not initialized or running outside of Telegram context.');
         }
     }, []);
 
