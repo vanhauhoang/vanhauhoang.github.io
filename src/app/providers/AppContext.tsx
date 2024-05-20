@@ -112,6 +112,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
         }, 4000);
     }, [userData?.spinsAvailable, userData?.bonusSpins]);
 
+    //@ts-ignore
     if (!window.Telegram) {
         return <p>You are not in telegram enviroment</p>;
     }
