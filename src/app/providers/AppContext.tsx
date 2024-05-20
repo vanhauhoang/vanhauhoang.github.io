@@ -25,6 +25,7 @@ interface AppContextType {
     isFreeSpins: boolean | null;
     isMobile: boolean;
     isAvailableToSpin: boolean;
+    tgUser: any;
     updateFreeSpins: () => void;
     updateBonusSpins: (countSpins?: number) => void;
     updateTempWinScore: (score: number) => void;
@@ -44,6 +45,7 @@ export const useAppContext = () => {
 
 export const AppContextProvider: React.FC<{ children: ReactElement | ReactElement[] }> = ({ children }) => {
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    const [tgUser, setTgUser] = useState<any>(null);
     const [userData, setUserData] = useState<UserData | null>(null);
     const [loading, setIsLoading] = useState<boolean>(true);
     const [isFreeSpins, setIsFreeSpins] = useState<boolean | null>(false);
@@ -57,6 +59,25 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
             setIsAvailableToSpin(true);
         }
     }, [userData?.bonusSpins, userData?.spinsAvailable]);
+
+    useEffect(() => {
+        //@ts-ignore
+        console.log('window?.Telegram?.WebApp', window?.Telegram?.WebApp);
+
+        //@ts-ignore
+        if (window?.Telegram?.WebApp) {
+            //@ts-ignore
+            const tg = window.Telegram.WebApp;
+            tg.ready();
+
+            // Get user data from the Telegram Web App context
+            const user = tg.initDataUnsafe.user;
+
+            setTgUser(user);
+
+            console.log('user from tg', user);
+        }
+    }, []);
 
     useEffect(() => {
         loginUser('1').then((res) => console.log('login user res', res));
@@ -133,6 +154,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     return (
         <AppContext.Provider
             value={{
+                tgUser,
                 userData,
                 isFreeSpins,
                 isAvailableToSpin,

@@ -8,11 +8,12 @@ import { Footer } from '../footer/footer';
 import styles from './main-app.module.scss';
 
 const MainApp: FC = (): ReactElement => {
-    const { userData, isMobile, isAvailableToSpin } = useAppContext();
+    const { userData, tgUser, isMobile, isAvailableToSpin } = useAppContext();
 
     return (
         <div className={styles.app__wrapper}>
             <div className={styles.app__container}>
+                {tgUser ? <p>TG user id: {tgUser.id}</p> : null}
                 <SpinTemplate isAvailableToSpin={isAvailableToSpin} isMobile={isMobile} />
                 <ExtraSpins isMobile={isMobile} userData={userData} />
                 <Invitation isMobile={isMobile} />
