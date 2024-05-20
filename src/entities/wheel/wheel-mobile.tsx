@@ -3,7 +3,6 @@ import kitty from '../../assets/images/kitty.png';
 import loaderIcon from '../../assets/images/loader.png';
 import { useAppContext } from '../../app/providers/AppContext';
 import soundWheel from '../../assets/sounds/Fortune-Prize-Wheel-01.mp3';
-import React from 'react';
 import { Typography } from '../../shared/components/typography';
 
 import styles from './wheel.module.scss';
