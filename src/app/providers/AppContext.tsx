@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import { GetCookie, removeAllCookies, SetCookie } from '../../shared/libs/cookies';
 
 //@ts-ignore
-const tg: any = window.Telegram.WebApp;
+const tg: any = window?.Telegram?.WebApp;
 
 // Define the shape of the user data
 export interface UserData {
@@ -22,13 +22,23 @@ export interface UserData {
     _id: string;
 }
 
+export interface TelegramUserData {
+    allows_write_to_pm: boolean;
+    first_name: string;
+    id: number;
+    is_premium: boolean;
+    language_code: string;
+    last_name: string;
+    username: string;
+}
+
 // Define the shape of the context
 interface AppContextType {
     userData: UserData | null;
     isFreeSpins: boolean | null;
     isMobile: boolean;
     isAvailableToSpin: boolean;
-    tgUser: any;
+    tgUser: TelegramUserData | null;
     updateFreeSpins: () => void;
     updateBonusSpins: (countSpins?: number) => void;
     updateTempWinScore: (score: number) => void;
@@ -48,7 +58,7 @@ export const useAppContext = () => {
 
 export const AppContextProvider: React.FC<{ children: ReactElement | ReactElement[] }> = ({ children }) => {
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
-    const [tgUser, setTgUser] = useState<any>(null);
+    const [tgUser, setTgUser] = useState<TelegramUserData | null>(null);
     const [userData, setUserData] = useState<UserData | null>(null);
     const [loading, setIsLoading] = useState<boolean>(true);
     const [isFreeSpins, setIsFreeSpins] = useState<boolean | null>(false);
@@ -69,14 +79,13 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
             // Get user data from the Telegram Web App context
             const user = tg.initDataUnsafe.user;
             setTgUser(user);
-            console.log('User from Telegram:', user);
         } else {
             console.error('Telegram WebApp is not initialized or running outside of Telegram context.');
         }
     }, []);
 
     useEffect(() => {
-        loginUser(tgUser?.id.toString()).then((res) => {
+        loginUser(tgUser?.id?.toString() || '').then((res) => {
             if (res) {
                 setUserData(res.user);
             }
