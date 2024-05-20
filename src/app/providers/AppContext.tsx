@@ -4,6 +4,9 @@ import { fetchUserById, loginUser, spinWheelByUser } from '../../shared/api/user
 import { useMediaQuery } from 'react-responsive';
 import { GetCookie, removeAllCookies, SetCookie } from '../../shared/libs/cookies';
 
+//@ts-ignore
+const tg: any = window.Telegram.WebApp;
+
 // Define the shape of the user data
 export interface UserData {
     bonusSpins: number;
@@ -61,12 +64,10 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     }, [userData?.bonusSpins, userData?.spinsAvailable]);
 
     useEffect(() => {
-        console.log('Checking Telegram WebApp initialization');
-        console.log('window obj', window);
         //@ts-ignore
         if (window.Telegram && window.Telegram.WebApp) {
             //@ts-ignore
-            const tg = window.Telegram.WebApp;
+
             tg.ready();
 
             // Get user data from the Telegram Web App context
