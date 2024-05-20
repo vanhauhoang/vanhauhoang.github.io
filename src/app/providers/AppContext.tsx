@@ -56,38 +56,6 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     const isAppLoaded = GetCookie('app_loaded');
 
     useEffect(() => {
-        if (userData?.spinsAvailable === 0 && userData?.bonusSpins === 0) {
-            setIsAvailableToSpin(false);
-        } else {
-            setIsAvailableToSpin(true);
-        }
-    }, [userData?.bonusSpins, userData?.spinsAvailable]);
-
-    useEffect(() => {
-        //@ts-ignore
-        if (window.Telegram && window.Telegram.WebApp) {
-            //@ts-ignore
-
-            tg.ready();
-
-            // Get user data from the Telegram Web App context
-            const user = tg.initDataUnsafe.user;
-            setTgUser(user);
-
-            console.log('User from Telegram:', user);
-        } else {
-            console.error('Telegram WebApp is not initialized or running outside of Telegram context.');
-        }
-    }, []);
-
-    useEffect(() => {
-        loginUser('1').then((res) => console.log('login user res', res));
-        fetchUserById('1').then((res) => setUserData(res?.data));
-        setTimeout(() => {
-            setIsLoading(false);
-            SetCookie('app_loaded', 'true');
-        }, 4000);
-
         return () => {
             onExitFromApp();
         };
@@ -95,15 +63,45 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
 
     useEffect(() => {
         //@ts-ignore
+        if (window.Telegram && window.Telegram.WebApp) {
+            //@ts-ignore
+            tg.ready();
+            // Get user data from the Telegram Web App context
+            const user = tg.initDataUnsafe.user;
+            setTgUser(user);
+            console.log('User from Telegram:', user);
+        } else {
+            console.error('Telegram WebApp is not initialized or running outside of Telegram context.');
+        }
+    }, []);
+
+    useEffect(() => {
+        loginUser(tgUser?.id.toString()).then((res) => {
+            if (res) {
+                setUserData(res.user);
+            }
+        });
+    }, [tgUser?.id]);
+
+    useEffect(() => {
+        //@ts-ignore
         if (userData?.bonusSpins > 0) {
             setIsFreeSpins(false);
+            setIsAvailableToSpin(true);
             //@ts-ignore
         } else if (userData?.spinsAvailable > 0) {
             setIsFreeSpins(true);
+            setIsAvailableToSpin(true);
         } else {
             setIsFreeSpins(null);
+            setIsAvailableToSpin(false);
         }
-    }, [userData]);
+
+        setTimeout(() => {
+            setIsLoading(false);
+            SetCookie('app_loaded', 'true');
+        }, 4000);
+    }, [userData?.spinsAvailable, userData?.bonusSpins]);
 
     if (loading && !isAppLoaded) {
         return <LoaderScreen />;
@@ -150,6 +148,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
 
     function onExitFromApp() {
         removeAllCookies();
+        tg.close();
     }
 
     return (

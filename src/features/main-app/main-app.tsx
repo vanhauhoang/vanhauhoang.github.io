@@ -6,6 +6,7 @@ import { Invitation } from '../invitation/invitation';
 import { Footer } from '../footer/footer';
 
 import styles from './main-app.module.scss';
+import { Typography } from '../../shared/components/typography';
 
 const MainApp: FC = (): ReactElement => {
     const { userData, tgUser, isMobile, isAvailableToSpin } = useAppContext();
@@ -17,11 +18,10 @@ const MainApp: FC = (): ReactElement => {
                 <ExtraSpins isMobile={isMobile} userData={userData} />
                 <Invitation isMobile={isMobile} />
                 <div>
-                    <h1>Telegram Web App</h1>
                     {tgUser ? (
-                        <p>
-                            Welcome, {tgUser.first_name} {tgUser.last_name}
-                        </p>
+                        <Typography>
+                            Welcome, {tgUser?.first_name} {tgUser?.last_name}
+                        </Typography>
                     ) : (
                         <p>Loading...</p>
                     )}
