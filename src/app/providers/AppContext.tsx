@@ -62,7 +62,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
 
     useEffect(() => {
         console.log('Checking Telegram WebApp initialization');
-
+        console.log('window obj', window);
         //@ts-ignore
         if (window.Telegram && window.Telegram.WebApp) {
             //@ts-ignore
