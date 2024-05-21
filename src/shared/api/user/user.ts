@@ -5,5 +5,6 @@ export const userApi = {
     spinWheel: (userId: string, body: any) => Instance.post(`spin/${userId}`, body),
     buySpins: (userId: string, body: any) => Instance.post(`buy/${userId}`, body),
     loginUser: (userId: string) => Instance.post(`login/${userId}`),
+    referral: (refferedUserId: string, body: any) => Instance.post(`referral/${refferedUserId}`, body),
 };
 

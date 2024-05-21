@@ -1,8 +1,9 @@
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import LoaderScreen from '../../features/loader-screen/LoaderScreen';
-import { loginUser, spinWheelByUser } from '../../shared/api/user/thunks';
+import { loginUser, referralUser, spinWheelByUser } from '../../shared/api/user/thunks';
 import { useMediaQuery } from 'react-responsive';
 import { GetCookie, removeAllCookies, SetCookie } from '../../shared/libs/cookies';
+import { parseUriParamsLine } from '../../shared/utils/parseUriParams';
 
 //@ts-ignore
 const tg: any = window?.Telegram?.WebApp;
@@ -64,6 +65,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     const [isFreeSpins, setIsFreeSpins] = useState<boolean | null>(false);
     const [isAvailableToSpin, setIsAvailableToSpin] = useState<boolean>(false);
     const isAppLoaded = GetCookie('app_loaded');
+    const uriParams = parseUriParamsLine(window.location.href?.split('?')?.[1]);
 
     useEffect(() => {
         return () => {
@@ -85,12 +87,21 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     }, []);
 
     useEffect(() => {
-        loginUser(tgUser?.id?.toString() || '').then((res) => {
-            if (res) {
-                setUserData(res.user);
-            }
-        });
-    }, [tgUser?.id]);
+        loginUser(tgUser?.id?.toString() || '574813379')
+            .then((res) => {
+                if (res) {
+                    setUserData(res.user);
+                    if (uriParams?.startapp) return res.user;
+                }
+            })
+            .then((res) => {
+                if (res) {
+                    referralUser(res?.userId, { referredById: uriParams?.startapp });
+                }
+
+                return;
+            });
+    }, [tgUser?.id, uriParams?.startapp]);
 
     useEffect(() => {
         //@ts-ignore

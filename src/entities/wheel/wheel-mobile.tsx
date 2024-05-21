@@ -78,7 +78,7 @@ export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin, isUserLog
     };
     const turns = 4; //number of turns for one spin
     const oneSectorAngle = 1 / sectorsData.length;
-    const inverseValuesSum = sectorsData?.reduce((total, elem) => total + 1 / elem.value, 0);
+    // const inverseValuesSum = sectorsData?.reduce((total, elem) => total + 1 / elem.value, 0);
 
     const beginTwistAngleRef = useRef(-0.25);
     const winAngleRef = useRef(0);
@@ -163,26 +163,26 @@ export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin, isUserLog
         }
     };
 
-    function assignProbabilities(coeff = 360) {
-        // if (sectorsData?.[0]?.probability) return;
+    // function assignProbabilities(coeff = 360) {
+    //     // if (sectorsData?.[0]?.probability) return;
 
-        //probabilities sum will might be equal to 1, so the remainder part will be added to the smallest value
-        let wholeProbabilityRemainder = coeff;
-        let minValueSectorIndex = 0;
-        for (let i = 0; i < sectorsData.length; i++) {
-            //count probability of elem according to whole value and round it
-            //@ts-ignore
-            sectorsData[i].probability = Math.floor(coeff / sectorsData[i].value / inverseValuesSum); // 1/x_i/sigma(1/x_i)
-            // reduce probability remainder
-            //@ts-ignore
-            wholeProbabilityRemainder -= sectorsData[i].probability;
-            // find min elem
-            if (sectorsData[i].value < sectorsData[minValueSectorIndex].value) minValueSectorIndex = i;
-        }
-        // add probability remainder to the smallest value
-        //@ts-ignore
-        sectorsData[minValueSectorIndex].probability += wholeProbabilityRemainder;
-    }
+    //     //probabilities sum will might be equal to 1, so the remainder part will be added to the smallest value
+    //     let wholeProbabilityRemainder = coeff;
+    //     let minValueSectorIndex = 0;
+    //     for (let i = 0; i < sectorsData.length; i++) {
+    //         //count probability of elem according to whole value and round it
+    //         //@ts-ignore
+    //         sectorsData[i].probability = Math.floor(coeff / sectorsData[i].value / inverseValuesSum); // 1/x_i/sigma(1/x_i)
+    //         // reduce probability remainder
+    //         //@ts-ignore
+    //         wholeProbabilityRemainder -= sectorsData[i].probability;
+    //         // find min elem
+    //         if (sectorsData[i].value < sectorsData[minValueSectorIndex].value) minValueSectorIndex = i;
+    //     }
+    //     // add probability remainder to the smallest value
+    //     //@ts-ignore
+    //     sectorsData[minValueSectorIndex].probability += wholeProbabilityRemainder;
+    // }
 
     function twistWheel() {
         const randomSectorValue = randomSector();

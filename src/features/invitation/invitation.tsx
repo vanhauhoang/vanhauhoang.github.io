@@ -8,7 +8,7 @@ import { UserData } from '../../app/providers/AppContext';
 
 interface Props {
     isMobile: boolean;
-    userData: UserData;
+    userData: UserData | null;
 }
 
 export const Invitation: FC<Props> = ({ isMobile, userData }): ReactElement => {

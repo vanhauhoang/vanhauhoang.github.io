@@ -41,3 +41,12 @@ export const buySpinsByUser = async (userId: string, body: any) => {
     }
 };
 
+export const referralUser = async (referredUserId: string, body: any) => {
+    try {
+        const res = await userApi.referral(referredUserId, body);
+        return res.data;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
