@@ -54,18 +54,18 @@ export const BuyTokenRow: FC<BuyRow> = (row): ReactElement => {
         <div key={id} className={styles.buy_row__wrapper}>
             <div className={styles.buy_row__container}>
                 <div className={styles.buy_row__spins}>
-                    <Typography fontSize={isMobile ? '28px' : '50px'} fontFamily="Roundy Rainbows, sans-serif">
+                    <Typography fontSize={isMobile ? '26px' : '50px'} fontFamily="Roundy Rainbows, sans-serif">
                         {countSpin}
                     </Typography>
-                    <Typography fontSize={isMobile ? '18px' : '24px'} fontFamily="Montserrat, sans-serif">
+                    <Typography fontSize={isMobile ? '16px' : '24px'} fontFamily="Montserrat, sans-serif">
                         spins
                     </Typography>
                 </div>
                 <div className={styles.buy_row__whisks}>
-                    <Typography fontSize={isMobile ? '18px' : '28px'} fontFamily="Montserrat, sans-serif">
+                    <Typography fontSize={isMobile ? '16px' : '28px'} fontFamily="Montserrat, sans-serif">
                         {countWhisk}K
                     </Typography>
-                    <Typography fontSize={isMobile ? '18px' : '26px'} fontFamily="Montserrat, sans-serif">
+                    <Typography fontSize={isMobile ? '16px' : '26px'} fontFamily="Montserrat, sans-serif">
                         WHISK
                     </Typography>
                 </div>
@@ -73,7 +73,10 @@ export const BuyTokenRow: FC<BuyRow> = (row): ReactElement => {
                     onClick={() => onBuyBonusToken(countSpin)}
                     fontFamily={'Montserrat, sans-serif'}
                     height={isMobile ? '28px' : '52px'}
-                    fontSize={isMobile ? '16px' : '28px'}
+                    fontSize={isMobile ? '14px' : '28px'}
+                    boxShadow={
+                        '0px 2px 2px rgba(0, 0, 0, 0.1), inset 0px 1px 1px rgb(255 173 173 / 60%), inset 0px -3px 2px rgba(0, 0, 0, 0.2);'
+                    }
                     text={'Buy now'}
                     fontWeight={'normal'}
                     width={'fit-content'}

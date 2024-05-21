@@ -8,6 +8,7 @@ import { Typography } from '../../shared/components/typography';
 import { Button } from '../../shared/components/button';
 import { useMediaQuery } from 'react-responsive';
 import { FC, ReactElement } from 'react';
+import backIcon from '../../assets/images/left-arrow.png';
 
 export const BuyTemplate: FC = (): ReactElement => {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export const BuyTemplate: FC = (): ReactElement => {
         <div className={styles.buy__wrapper}>
             <div className={styles.buy__container}>
                 <div className={styles.buy__title_and_logo}>
-                    <Logo onClick={onNavigateToMainScreen} fontSize={'42px'} />
+                    <Logo fontSize={'42px'} />
                     <span className={styles.buy__title}>
                         <Heading className={styles.buy__heading} level="h1">
                             Spin&Earn
@@ -38,12 +39,20 @@ export const BuyTemplate: FC = (): ReactElement => {
                         ))}
                 </div>
                 <div className={styles.buy__balance}>
-                    <Typography fontSize={'16px'} fontFamily="Montserrat, sans-serif">
-                        Wallet balance
-                    </Typography>
-                    <Typography fontSize={'18px'} fontFamily="Montserrat, sans-serif">
-                        1.345.584 WHISK
-                    </Typography>
+                    <img
+                        onClick={onNavigateToMainScreen}
+                        src={backIcon}
+                        className={styles.buy__balance_icon}
+                        alt="back to main screen"
+                    />
+                    <div className={styles.buy__balance_value}>
+                        <Typography fontSize={'14px'} fontFamily="Montserrat, sans-serif">
+                            Wallet balance
+                        </Typography>
+                        <Typography fontSize={'16px'} fontFamily="Montserrat, sans-serif">
+                            1.345.584 WHISK
+                        </Typography>
+                    </div>
                 </div>
                 <div className={styles.buy__footer_connect}>
                     <div className={styles.buy__footer_connect_container}>

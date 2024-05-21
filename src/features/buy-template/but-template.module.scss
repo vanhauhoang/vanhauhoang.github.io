@@ -42,14 +42,27 @@
     }
 
     &__balance {
-        width: 100%;
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 10px;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
         padding-right: 20px;
-        padding-top: 50px;
-        padding-bottom: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        &_icon {
+            height: 20px;
+            filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(168deg)
+                brightness(109%) contrast(101%);
+            padding-left: 20px;
+        }
+
+        &_value {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
     }
 
     &__footer_connect {

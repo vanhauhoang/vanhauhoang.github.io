@@ -6,10 +6,9 @@ import { Invitation } from '../invitation/invitation';
 import { Footer } from '../footer/footer';
 
 import styles from './main-app.module.scss';
-import { Typography } from '../../shared/components/typography';
 
 const MainApp: FC = (): ReactElement => {
-    const { userData, tgUser, isMobile, isAvailableToSpin } = useAppContext();
+    const { userData, isMobile, isAvailableToSpin } = useAppContext();
 
     return (
         <div className={styles.app__wrapper}>
@@ -20,16 +19,19 @@ const MainApp: FC = (): ReactElement => {
                     isMobile={isMobile}
                 />
                 <ExtraSpins isMobile={isMobile} userData={userData} />
-                <Invitation isMobile={isMobile} />
-                <div>
-                    {tgUser ? (
-                        <Typography>
-                            Welcome, {tgUser?.first_name} {tgUser?.last_name}
-                        </Typography>
-                    ) : (
-                        <p>Loading...</p>
-                    )}
-                </div>
+                <Invitation userData={userData} isMobile={isMobile} />
+                {/* <button
+                    onClick={() => {
+                        //@ts-ignore
+                        return window.Telegram.WebApp.showPopup({
+                            title: 'Contacts',
+                            message: 'This feature is not yet implemented.',
+                            buttons: [{ text: 'OK', type: 'close' }],
+                        });
+                    }}
+                >
+                    Show Contacts
+                </button> */}
                 <Footer isMobile={isMobile} unclaimedTokens={userData?.unclaimedTokens} />
             </div>
         </div>

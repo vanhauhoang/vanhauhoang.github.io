@@ -7,6 +7,7 @@ type Props = {
     fontSize?: string;
     height?: string;
     fontFamily?: string;
+    boxShadow?: string;
     backgroundColor?: string;
     fontWeight?: string;
     imageLeft?: string;
@@ -26,6 +27,7 @@ export const Button: FC<Props> = (props): ReactElement => {
         height = '',
         fontFamily,
         fontWeight,
+        boxShadow,
         imageLeft,
         imageRight,
         backgroundColor,
@@ -61,6 +63,7 @@ export const Button: FC<Props> = (props): ReactElement => {
                 width,
                 textTransform,
                 borderRadius,
+                boxShadow,
                 backgroundImage: backgroundColor ? 'none' : 'linear-gradient(to bottom, #f2632e, #e93324)',
             }}
             className={styles.button}

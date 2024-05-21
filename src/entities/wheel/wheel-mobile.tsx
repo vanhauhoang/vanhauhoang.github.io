@@ -16,16 +16,16 @@ interface WheelMobileProps {
 }
 
 const sectorsData = [
-    { value: 10, colour: '#10c569' },
-    { value: 5, colour: '#0694d4' },
-    { value: 100, colour: '#f34a3a' },
-    { value: 50, colour: '#f6bd0d' },
-    { value: 10, colour: '#10c569' },
-    { value: 5, colour: '#0694d4' },
-    { value: 100, colour: '#f34a3a' },
-    { value: 50, colour: '#f6bd0d' },
-    { value: 10, colour: '#10c569' },
-    { value: 5, colour: '#0694d4' },
+    { value: 10, colour: '#10c569', probability: 100 },
+    { value: 5, colour: '#0694d4', probability: 100 },
+    { value: 100, colour: '#f34a3a', probability: 100 },
+    { value: 50, colour: '#f6bd0d', probability: 100 },
+    { value: 10, colour: '#10c569', probability: 100 },
+    { value: 5, colour: '#0694d4', probability: 100 },
+    { value: 100, colour: '#f34a3a', probability: 100 },
+    { value: 50, colour: '#f6bd0d', probability: 100 },
+    { value: 10, colour: '#10c569', probability: 100 },
+    { value: 5, colour: '#0694d4', probability: 100 },
 ] as { value: number; colour: string; probability?: number }[];
 
 export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin, isUserLoggedIn }): ReactElement => {
@@ -96,7 +96,6 @@ export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin, isUserLog
                 setCtx(context);
             }
         }
-        assignProbabilities();
 
         return () => {
             cleanUpFunc();
@@ -165,7 +164,7 @@ export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin, isUserLog
     };
 
     function assignProbabilities(coeff = 360) {
-        if (sectorsData?.[0]?.probability) return;
+        // if (sectorsData?.[0]?.probability) return;
 
         //probabilities sum will might be equal to 1, so the remainder part will be added to the smallest value
         let wholeProbabilityRemainder = coeff;
