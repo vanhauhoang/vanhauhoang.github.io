@@ -2,7 +2,7 @@ import React, { createContext, ReactElement, useContext, useEffect, useState } f
 import LoaderScreen from '../../features/loader-screen/LoaderScreen';
 import { loginUser, referralUser, spinWheelByUser } from '../../shared/api/user/thunks';
 import { useMediaQuery } from 'react-responsive';
-import { GetCookie, removeAllCookies, SetCookie } from '../../shared/libs/cookies';
+import { removeAllCookies } from '../../shared/libs/cookies';
 import { parseUriParamsLine } from '../../shared/utils/parseUriParams';
 
 //@ts-ignore
@@ -64,7 +64,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     const [loading, setIsLoading] = useState<boolean>(true);
     const [isFreeSpins, setIsFreeSpins] = useState<boolean | null>(false);
     const [isAvailableToSpin, setIsAvailableToSpin] = useState<boolean>(false);
-    const isAppLoaded = GetCookie('app_loaded');
+    const [isAppLoaded, setIsAppLoaded] = useState<boolean>(false);
     const uriParams = parseUriParamsLine(window.location.href?.split('?')?.[1]);
 
     useEffect(() => {
@@ -98,7 +98,6 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
                 if (res) {
                     referralUser(res?.userId, { referredById: uriParams?.startapp });
                 }
-
                 return;
             });
     }, [tgUser?.id, uriParams?.startapp]);
@@ -118,17 +117,12 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
         }
 
         setTimeout(() => {
+            setIsAppLoaded(true);
             setIsLoading(false);
-            SetCookie('app_loaded', 'true');
         }, 4000);
     }, [userData?.spinsAvailable, userData?.bonusSpins]);
 
-    //@ts-ignore
-    if (!window.Telegram) {
-        return <p>You are not in telegram enviroment</p>;
-    }
-
-    if (loading && !isAppLoaded && tg?.Telegram) {
+    if (loading && !isAppLoaded) {
         return <LoaderScreen />;
     }
 
