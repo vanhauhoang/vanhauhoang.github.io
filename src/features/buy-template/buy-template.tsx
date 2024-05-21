@@ -35,7 +35,12 @@ export const BuyTemplate: FC = (): ReactElement => {
                 <div className={styles.buy__buy_rows}>
                     {BUY_ROWS_DATA &&
                         BUY_ROWS_DATA.map((buyRow) => (
-                            <BuyTokenRow id={buyRow.id} countSpin={buyRow.countSpins} countWhisk={buyRow.countWhisks} />
+                            <BuyTokenRow
+                                key={buyRow.id}
+                                id={buyRow.id}
+                                countSpin={buyRow.countSpins}
+                                countWhisk={buyRow.countWhisks}
+                            />
                         ))}
                 </div>
                 <div className={styles.buy__balance}>

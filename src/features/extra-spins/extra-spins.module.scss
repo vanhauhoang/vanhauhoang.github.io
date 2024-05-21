@@ -43,7 +43,7 @@
 
         &__bonus_spin {
             display: flex;
-            align-items: flex-end;
+            justify-content: flex-end;
             flex: 1;
 
             &__text_wrapper {
@@ -61,3 +61,4 @@
         }
     }
 }
+

@@ -75,7 +75,7 @@ export const BuyTokenRow: FC<BuyRow> = (row): ReactElement => {
                     height={isMobile ? '28px' : '52px'}
                     fontSize={isMobile ? '14px' : '28px'}
                     boxShadow={
-                        '0px 2px 2px rgba(0, 0, 0, 0.1), inset 0px 1px 1px rgb(255 173 173 / 60%), inset 0px -3px 2px rgba(0, 0, 0, 0.2);'
+                        '0px 2px 2px rgba(0, 0, 0, 0.1), inset 0px 1px 1px rgb(255 161 161 / 60%), inset 0px -3px 2px rgba(0, 0, 0, 0.2)'
                     }
                     text={'Buy now'}
                     fontWeight={'normal'}
