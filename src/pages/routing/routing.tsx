@@ -1,8 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-import MainPage from '../main/main';
-import BuyPage from '../buy/buy';
 import { FC, ReactElement } from 'react';
+import React from 'react';
+
+const BuyPage = React.lazy(() => import('../buy/buy'));
+const MainPage = React.lazy(() => import('../main/main'));
 
 export const Routing: FC = (): ReactElement => {
     return (
