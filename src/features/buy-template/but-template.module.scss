@@ -3,7 +3,7 @@
         width: 100vw;
         height: auto;
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 600px) {
             height: calc(100vh - 150px);
         }
     }
@@ -30,7 +30,7 @@
     &__heading {
         font-size: 120px;
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 600px) {
             font-size: 60px;
         }
     }

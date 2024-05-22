@@ -2,7 +2,7 @@
     &__heading {
         font-size: 120px;
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 600px) {
             font-size: 58px;
         }
     }
@@ -17,7 +17,7 @@
         align-items: center;
         padding: 20px 20px 0px;
 
-        @media (min-width: 500px) {
+        @media (min-width: 600px) {
             top: -8%;
         }
     }
@@ -54,7 +54,7 @@
             background-color: #0a0d24;
             gap: 20px;
 
-            @media screen and (max-width: 500px) {
+            @media screen and (max-width: 600px) {
                 width: 180px;
                 height: 60px;
             }
@@ -62,7 +62,7 @@
             &__loader {
                 height: 105px;
 
-                @media screen and (max-width: 500px) {
+                @media screen and (max-width: 600px) {
                     height: 40px;
                 }
             }

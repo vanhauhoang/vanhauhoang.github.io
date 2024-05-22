@@ -1,11 +1,10 @@
 export function getTimeLeftFromTimestamp(timestamp: string): string {
     const now = new Date();
-    const targetTime = new Date(timestamp);
-    targetTime.setHours(targetTime.getHours() + 5);
+    const targetTime = new Date(new Date(timestamp).getTime() + 6 * 60 * 60 * 1000);
     const timeDiff = targetTime.getTime() - now.getTime();
 
     if (timeDiff <= 0) {
-        return '';
+        return 'about now!';
     }
 
     const hours = Math.floor(timeDiff / (1000 * 60 * 60));

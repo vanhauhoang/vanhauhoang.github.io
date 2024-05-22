@@ -15,7 +15,7 @@ type BuyRow = {
 };
 
 export const BuyTokenRow: FC<BuyRow> = (row): ReactElement => {
-    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
     const { updateBonusSpins } = useAppContext();
 
     const { id, countSpin, countWhisk, userId } = row;
