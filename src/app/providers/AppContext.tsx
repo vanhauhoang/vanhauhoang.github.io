@@ -4,6 +4,7 @@ import { loginUser, referralUser, spinWheelByUser } from '../../shared/api/user/
 import { useMediaQuery } from 'react-responsive';
 import { removeAllCookies } from '../../shared/libs/cookies';
 import { parseUriParamsLine } from '../../shared/utils/parseUriParams';
+import { WHEEL_SPINNING_SECONDS } from '../../shared/libs/constants';
 
 //@ts-ignore
 const tg: any = window?.Telegram?.WebApp;
@@ -104,7 +105,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const res = await loginUser(tgUser?.id?.toString() || ''); //574813379
+                const res = await loginUser(tgUser?.id?.toString() || '574813379'); //574813379
                 if (res) {
                     setUserData(res.user);
                     if (uriParams?.tgWebAppStartParam) {
@@ -158,7 +159,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
                             ...prevUserData,
                             unclaimedTokens: prevUserData.unclaimedTokens + score,
                         }));
-                    }, 7_000);
+                    }, WHEEL_SPINNING_SECONDS);
                 }
             });
         }

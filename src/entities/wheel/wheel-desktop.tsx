@@ -11,6 +11,7 @@ import { LottieAnimation } from '../lottie-animation/lottie-animation';
 import coinAnimation from '../../assets/animations/coin-dollar.json';
 import { Flip, toast } from 'react-toastify';
 import { sectorsData } from './constants';
+import { WHEEL_SPINNING_SECONDS } from '../../shared/libs/constants';
 
 interface WheelDesktopProps {
     isAvailableToSpin: boolean;
@@ -130,7 +131,7 @@ export const WheelDesktop: FC<WheelDesktopProps> = ({ isAvailableToSpin, isUserL
 
             setTimeout(() => {
                 setIsDisplayAnimation(true);
-            }, 5_500);
+            }, WHEEL_SPINNING_SECONDS);
 
             // setTimeout(() => {
             //     if (audioRef.current) {
@@ -188,8 +189,7 @@ export const WheelDesktop: FC<WheelDesktopProps> = ({ isAvailableToSpin, isUserL
             //@ts-ignore
             upperBorder += sectorsData?.[i]?.probability;
             if (randomNumber < upperBorder) {
-                // add score setter
-                updateTempWinScore(sectorsData?.[i]?.value);
+                updateTempWinScore(sectorsData?.[i]?.value); // add score setter and make request here
                 return i;
             }
         }

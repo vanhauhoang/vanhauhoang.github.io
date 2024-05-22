@@ -1,3 +1,4 @@
+import { BuySpinsBody, ReferralBody, SpinWheelBody } from './types';
 import { userApi } from './user';
 
 export const loginUser = async (userId: string) => {
@@ -23,7 +24,7 @@ export const fetchUserById = async (userId: string) => {
     }
 };
 
-export const spinWheelByUser = async (userId: string, body: any) => {
+export const spinWheelByUser = async (userId: string, body: SpinWheelBody) => {
     try {
         const res = await userApi.spinWheel(userId, body);
         return res;
@@ -32,7 +33,7 @@ export const spinWheelByUser = async (userId: string, body: any) => {
     }
 };
 
-export const buySpinsByUser = async (userId: string, body: any) => {
+export const buySpinsByUser = async (userId: string, body: BuySpinsBody) => {
     try {
         const res = await userApi.buySpins(userId, body);
         return res;
@@ -41,7 +42,7 @@ export const buySpinsByUser = async (userId: string, body: any) => {
     }
 };
 
-export const referralUser = async (referredUserId: string, body: any) => {
+export const referralUser = async (referredUserId: string, body: ReferralBody) => {
     try {
         const res = await userApi.referral(referredUserId, body);
         return res.data;

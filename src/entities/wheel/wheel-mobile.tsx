@@ -10,6 +10,7 @@ import { LottieAnimation } from '../lottie-animation/lottie-animation';
 import coinAnimation from '../../assets/animations/coin-dollar.json';
 import { Flip, toast } from 'react-toastify';
 import { SectorData, sectorsData } from './constants';
+import { WHEEL_SPINNING_SECONDS } from '../../shared/libs/constants';
 
 interface WheelMobileProps {
     isAvailableToSpin: boolean;
@@ -128,7 +129,7 @@ export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin, isUserLog
 
             setTimeout(() => {
                 setIsDisplayAnimation(true);
-            }, 5_500);
+            }, WHEEL_SPINNING_SECONDS);
 
             // setTimeout(() => {
             //     if (audioRef.current) {
@@ -185,8 +186,7 @@ export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin, isUserLog
         for (let i = 0, upperBorder = 0; i < sectorsData?.length; i++) {
             upperBorder += sectorsData?.[i]?.probability as number;
             if (randomNumber < upperBorder) {
-                // add score setter
-                updateTempWinScore(sectorsData?.[i]?.value);
+                updateTempWinScore(sectorsData?.[i]?.value); // add score setter and make request here
                 return i;
             }
         }
