@@ -48,21 +48,21 @@ interface AppContextType {
 // Create the context
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const FAKE_USER = {
-    _id: '664df59323d74ce23ab961f5',
-    userId: '574813379',
-    unclaimedTokens: 60,
-    countSpins: 3,
-    spinsAvailable: 2,
-    bonusSpins: 0,
-    referralCode: '6910180d-d5b0-4093-a4b0-268a999c4ac2',
-    referredBy: null,
-    referredUsers: [],
-    lastSpinTime: ['2024-05-21T19:02:04.007+00:00', '2024-05-22T04:24:11.639+00:00', '2024-05-22T10:17:34.732+00:00'],
-    createdAt: '2024-05-21T11:33:49.389+00:00',
-    updatedAt: '2024-05-22T10:17:34.733+00:00',
-    __v: 5,
-} as any;
+// const FAKE_USER = {
+//     _id: '664df59323d74ce23ab961f5',
+//     userId: '574813379',
+//     unclaimedTokens: 60,
+//     countSpins: 3,
+//     spinsAvailable: 2,
+//     bonusSpins: 0,
+//     referralCode: '6910180d-d5b0-4093-a4b0-268a999c4ac2',
+//     referredBy: null,
+//     referredUsers: [],
+//     lastSpinTime: ['2024-05-21T19:02:04.007+00:00', '2024-05-22T04:24:11.639+00:00', '2024-05-22T10:17:34.732+00:00'],
+//     createdAt: '2024-05-21T11:33:49.389+00:00',
+//     updatedAt: '2024-05-22T10:17:34.733+00:00',
+//     __v: 5,
+// } as any;
 
 // Custom hook to use the context
 export const useAppContext = () => {
