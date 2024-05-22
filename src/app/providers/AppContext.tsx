@@ -109,12 +109,12 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
             .then((res) => {
                 if (res) {
                     setUserData(res.user);
-                    if (uriParams?.startapp) return res.user;
+                    if (uriParams?.tgWebAppStartParam) return res.user;
                 }
             })
             .then((res) => {
                 if (res) {
-                    referralUser(res?.userId, { referredById: uriParams?.startapp });
+                    referralUser(res?.userId, { referredById: uriParams?.tgWebAppStartParam?.split('#')?.[0] }); //tgWebAppStartParam: "823787485#tgWebAppData"
                 }
                 return;
             });
