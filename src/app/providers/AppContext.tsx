@@ -4,6 +4,7 @@ import { loginUser, referralUser, spinWheelByUser } from '../../shared/api/user/
 import { useMediaQuery } from 'react-responsive';
 import { removeAllCookies } from '../../shared/libs/cookies';
 import { parseUriParamsLine } from '../../shared/utils/parseUriParams';
+import { getTimeLeftFromTimestamp } from '../../shared/libs/getTimeLeft';
 
 //@ts-ignore
 const tg: any = window?.Telegram?.WebApp;
@@ -83,8 +84,6 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     const [isAvailableToSpin, setIsAvailableToSpin] = useState<boolean>(false);
     const [isAppLoaded, setIsAppLoaded] = useState<boolean>(false);
     const uriParams = parseUriParamsLine(window.location.href?.split('?')?.[1]);
-
-    console.log('uriParams', uriParams);
 
     useEffect(() => {
         return () => {

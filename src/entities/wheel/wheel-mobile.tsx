@@ -138,7 +138,7 @@ export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin, isUserLog
 
             setTimeout(() => {
                 setIsNeedRotateSpinIcon(false);
-            }, 8_000);
+            }, 9_000);
 
             setTimeout(() => {
                 setIsDisplayAnimation(false);

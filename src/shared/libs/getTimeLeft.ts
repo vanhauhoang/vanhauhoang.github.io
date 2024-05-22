@@ -1,9 +1,8 @@
-export function getTimeLeft(lastTime: string) {
-    const now: any = new Date();
-    const endTime: any = new Date(lastTime);
-    const timeDiff = endTime - now;
-
-    if (!lastTime) return '5 hours';
+export function getTimeLeftFromTimestamp(timestamp: string): string {
+    const now = new Date();
+    const targetTime = new Date(timestamp);
+    targetTime.setHours(targetTime.getHours() + 5);
+    const timeDiff = targetTime.getTime() - now.getTime();
 
     if (timeDiff <= 0) {
         return '';
@@ -14,13 +13,13 @@ export function getTimeLeft(lastTime: string) {
     const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
     if (hours > 1) {
-        return `${hours} hours`;
+        return `${hours} hours left`;
     } else if (hours === 1) {
-        return '1 hour';
+        return `1 hour left`;
     } else if (minutes >= 1) {
-        return `${minutes} minutes`;
+        return `${minutes} minutes left`;
     } else {
-        return `${seconds} seconds`;
+        return `${seconds} seconds left`;
     }
 }
 
