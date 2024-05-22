@@ -13,13 +13,13 @@ export function getTimeLeftFromTimestamp(timestamp: string): string {
     const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
     if (hours > 1) {
-        return `${hours} hours left`;
+        return `${hours} hours`;
     } else if (hours === 1) {
-        return `1 hour left`;
+        return `1 hour`;
     } else if (minutes >= 1) {
-        return `${minutes} minutes left`;
+        return `${minutes} minutes`;
     } else {
-        return `${seconds} seconds left`;
+        return `${seconds} seconds`;
     }
 }
 
