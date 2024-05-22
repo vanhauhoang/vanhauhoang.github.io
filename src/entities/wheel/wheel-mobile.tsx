@@ -131,6 +131,12 @@ export const WheelMobile: FC<WheelMobileProps> = ({ isAvailableToSpin, isUserLog
             }, 5_500);
 
             setTimeout(() => {
+                if (audioRef.current) {
+                    audioRef.current.pause();
+                }
+            }, 7_000);
+
+            setTimeout(() => {
                 setIsNeedRotateSpinIcon(false);
             }, 8_000);
 
