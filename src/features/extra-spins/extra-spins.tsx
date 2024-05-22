@@ -6,6 +6,7 @@ import { Button } from '../../shared/components/button';
 import { UserData } from '../../app/providers/AppContext';
 
 import styles from './extra-spins.module.scss';
+import { getTimeLeft } from '../../shared/libs/getTimeLeft';
 
 interface Props {
     userData: UserData | null;
@@ -16,6 +17,7 @@ export const ExtraSpins: FC<Props> = ({ userData, isMobile }): ReactElement => {
     const navigate = useNavigate();
     const [rotateIcon, setRotateIcon] = useState<boolean>(false);
     const timeIconRef = useRef<HTMLImageElement>(null);
+    const lastSpinTime = userData?.lastSpinTime[userData?.lastSpinTime?.length - 1];
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -52,7 +54,7 @@ export const ExtraSpins: FC<Props> = ({ userData, isMobile }): ReactElement => {
                                 src={timeIcon}
                             />
                             <Typography fontSize={isMobile ? '12px' : '23px'} fontFamily="Montserrat, sans-serif">
-                                New spin in <br /> 5 hours
+                                New spin in <br /> {getTimeLeft(lastSpinTime || '')}
                             </Typography>
                         </div>
                     ) : null}

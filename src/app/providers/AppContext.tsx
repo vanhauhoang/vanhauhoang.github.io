@@ -18,6 +18,7 @@ export interface UserData {
     spinsAvailable: number;
     unclaimedTokens: number;
     updatedAt: string;
+    lastSpinTime: string[];
     userId: string;
     __v: number;
     _id: string;
