@@ -28,7 +28,7 @@ export const Invitation: FC<Props> = ({ isMobile, userData }): ReactElement => {
         } else {
             try {
                 await navigator.clipboard.writeText(`
-            Your referal links is: t.me/testWhiskers_bot/testwhisk?startapp=${userData?.userId}
+            Your referal links is: t.me/testWhiskers_bot/testwhisk/whiskers/?startapp=${userData?.userId}
             Share it to your friends and you will get a bonus spins!
             `);
 
