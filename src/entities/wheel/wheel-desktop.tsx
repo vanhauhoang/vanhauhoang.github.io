@@ -132,11 +132,11 @@ export const WheelDesktop: FC<WheelDesktopProps> = ({ isAvailableToSpin, isUserL
                 setIsDisplayAnimation(true);
             }, 5_500);
 
-            setTimeout(() => {
-                if (audioRef.current) {
-                    audioRef.current.pause();
-                }
-            }, 7_000);
+            // setTimeout(() => {
+            //     if (audioRef.current) {
+            //         audioRef.current.pause();
+            //     }
+            // }, 7_000);
 
             setTimeout(() => {
                 setIsNeedRotateSpinIcon(false);
