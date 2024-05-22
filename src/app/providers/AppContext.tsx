@@ -4,7 +4,6 @@ import { loginUser, referralUser, spinWheelByUser } from '../../shared/api/user/
 import { useMediaQuery } from 'react-responsive';
 import { removeAllCookies } from '../../shared/libs/cookies';
 import { parseUriParamsLine } from '../../shared/utils/parseUriParams';
-import { getTimeLeftFromTimestamp } from '../../shared/libs/getTimeLeft';
 
 //@ts-ignore
 const tg: any = window?.Telegram?.WebApp;
