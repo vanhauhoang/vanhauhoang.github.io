@@ -9,10 +9,12 @@ import { Button } from '../../shared/components/button';
 import { useMediaQuery } from 'react-responsive';
 import { FC, ReactElement } from 'react';
 import backIcon from '../../assets/images/left-arrow.png';
+import { useAppContext } from '../../app/providers/AppContext';
 
 export const BuyTemplate: FC = (): ReactElement => {
     const navigate = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    const { userData } = useAppContext();
 
     const onNavigateToMainScreen = () => {
         navigate('/whiskers/');
@@ -40,6 +42,7 @@ export const BuyTemplate: FC = (): ReactElement => {
                                 id={buyRow.id}
                                 countSpin={buyRow.countSpins}
                                 countWhisk={buyRow.countWhisks}
+                                userId={userData?.userId}
                             />
                         ))}
                 </div>

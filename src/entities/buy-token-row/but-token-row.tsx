@@ -11,31 +11,46 @@ type BuyRow = {
     id: number;
     countSpin: number;
     countWhisk: number;
+    userId: string | undefined;
 };
 
 export const BuyTokenRow: FC<BuyRow> = (row): ReactElement => {
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
     const { updateBonusSpins } = useAppContext();
 
-    const { id, countSpin, countWhisk } = row;
+    const { id, countSpin, countWhisk, userId } = row;
 
     const onBuyBonusToken = async (countSpin: number) => {
-        const res = await buySpinsByUser('1', { countSpins: countSpin });
+        if (userId) {
+            const res = await buySpinsByUser(userId, { countSpins: countSpin });
 
-        if (res?.status === 200) {
-            updateBonusSpins(countSpin);
+            if (res?.status === 200) {
+                updateBonusSpins(countSpin);
 
-            toast.success(`You bought ${countSpin} spins`, {
-                position: 'bottom-left',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'dark',
-                transition: Flip,
-            });
+                toast.success(`You bought ${countSpin} spins`, {
+                    position: 'bottom-left',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                    transition: Flip,
+                });
+            } else {
+                toast.error(`Can't buy spins.`, {
+                    position: 'bottom-left',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                    transition: Flip,
+                });
+            }
         } else {
             toast.error(`Can't buy spins.`, {
                 position: 'bottom-left',
