@@ -83,6 +83,8 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     const [isAppLoaded, setIsAppLoaded] = useState<boolean>(false);
     const uriParams = parseUriParamsLine(window.location.href?.split('?')?.[1]);
 
+    console.log('uriParams', uriParams);
+
     useEffect(() => {
         return () => {
             onExitFromApp();
