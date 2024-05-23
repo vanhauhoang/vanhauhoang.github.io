@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import timeIcon from '../../assets/images/time_icon.png';
 import { Button } from '../../shared/components/button';
 import { UserData } from '../../app/providers/AppContext';
+import BackgroundSound from '../../assets/sounds/Casino Background Loop.mp3';
 
 import styles from './extra-spins.module.scss';
 import { getTimeLeftFromTimestamp } from '../../shared/libs/getTimeLeft';
@@ -33,6 +34,10 @@ export const ExtraSpins: FC<Props> = ({ userData, isMobile }): ReactElement => {
 
     return (
         <div className={styles.app__extra_spins}>
+            <audio autoPlay={true} loop={true}>
+                <source src={BackgroundSound} type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
             <div className={styles.app__extra_spins__free_spin}>
                 <Typography fontSize={isMobile ? '16px' : '40px'}>Free spins</Typography>
                 <div className={styles.app__extra_spins__free_spin__score}>
