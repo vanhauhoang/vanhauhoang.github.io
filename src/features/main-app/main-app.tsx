@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useRef } from 'react';
+import { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import { SpinTemplate } from '../spin-template/spin-template';
 import { useAppContext } from '../../app/providers/AppContext';
 import { ExtraSpins } from '../extra-spins/extra-spins';
@@ -11,24 +11,34 @@ import styles from './main-app.module.scss';
 const MainApp: FC = (): ReactElement => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const { userData, isMobile, isAvailableToSpin } = useAppContext();
+    const [isAudioMuted, setIsAudioMuted] = useState<boolean>(true);
 
     useEffect(() => {
         const handleUserInteraction = () => {
             if (audioRef.current) {
-                audioRef.current.play().catch((error) => {
-                    console.error('Error playing audio:', error);
-                });
+                audioRef.current.muted = false; // Unmute the audio
+                setIsAudioMuted(false);
             }
-            // Remove event listener after first interaction
             document.removeEventListener('click', handleUserInteraction);
             document.removeEventListener('keydown', handleUserInteraction);
             document.removeEventListener('touchstart', handleUserInteraction);
         };
 
-        document.addEventListener('click', handleUserInteraction);
-        document.addEventListener('keydown', handleUserInteraction);
-        document.addEventListener('touchstart', handleUserInteraction);
+        const setupAudio = () => {
+            if (audioRef.current) {
+                audioRef.current.play().catch((error) => {
+                    console.error('Error playing audio:', error);
+                });
+            }
+            document.addEventListener('click', handleUserInteraction);
+            document.addEventListener('keydown', handleUserInteraction);
+            document.addEventListener('touchstart', handleUserInteraction);
+        };
 
+        // Make sure the audio is set up every time the app loads
+        setupAudio();
+
+        // Clean up event listeners on component unmount
         return () => {
             document.removeEventListener('click', handleUserInteraction);
             document.removeEventListener('keydown', handleUserInteraction);
@@ -38,7 +48,7 @@ const MainApp: FC = (): ReactElement => {
 
     return (
         <div className={styles.app__wrapper}>
-            <audio ref={audioRef} autoPlay={true} loop={true}>
+            <audio ref={audioRef} autoPlay={true} loop={true} muted={isAudioMuted}>
                 <source src={BackgroundSound} type="audio/mpeg" />
                 Your browser does not support the audio element.
             </audio>
