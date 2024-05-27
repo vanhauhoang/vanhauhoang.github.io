@@ -45,21 +45,25 @@ const MainApp: FC = (): ReactElement => {
             document.removeEventListener('touchstart', handleUserInteraction);
         };
 
-        // Telegram WebApp initialization
-        //@ts-ignore
-        if (window.Telegram && window.Telegram.WebApp) {
-            //@ts-ignore
-            window.Telegram.WebApp.ready();
-            //@ts-ignore
-            window.Telegram.WebApp.onEvent('viewportChanged', () => {
-                setupAudio(); // Re-setup audio on each viewport change
-                addInteractionListeners(); // Ensure interaction listeners are added
-            });
-        } else {
-            // Fallback if not running within Telegram
-            setupAudio();
-            addInteractionListeners();
-        }
+        const initializeTelegramWebApp = () => {
+            // @ts-ignore
+            if (window.Telegram && window.Telegram.WebApp) {
+                // @ts-ignore
+                window.Telegram.WebApp.ready();
+                // @ts-ignore
+                window.Telegram.WebApp.onEvent('viewportChanged', () => {
+                    setupAudio(); // Re-setup audio on each viewport change
+                    addInteractionListeners(); // Ensure interaction listeners are added
+                });
+            }
+        };
+
+        // Setup audio and listeners on initial load
+        setupAudio();
+        addInteractionListeners();
+
+        // Initialize Telegram Web App
+        initializeTelegramWebApp();
 
         // Clean up event listeners on component unmount
         return () => {
