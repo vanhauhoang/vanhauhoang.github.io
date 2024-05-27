@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useRef, useState } from 'react';
+import { FC, ReactElement, useRef, useState } from 'react';
 import { SpinTemplate } from '../spin-template/spin-template';
 import { useAppContext } from '../../app/providers/AppContext';
 import { ExtraSpins } from '../extra-spins/extra-spins';
@@ -14,63 +14,63 @@ const MainApp: FC = (): ReactElement => {
     const { userData, isMobile, isAvailableToSpin } = useAppContext();
     const [isAudioMuted, setIsAudioMuted] = useState<boolean>(true);
 
-    useEffect(() => {
-        const handleUserInteraction = () => {
-            if (audioRef.current) {
-                audioRef.current.muted = false; // Unmute the audio
-                setIsAudioMuted(false);
-                audioRef.current.play().catch((error) => {
-                    console.error('Error playing audio:', error);
-                });
-            }
-        };
+    // useEffect(() => {
+    //     const handleUserInteraction = () => {
+    //         if (audioRef.current) {
+    //             audioRef.current.muted = false; // Unmute the audio
+    //             setIsAudioMuted(false);
+    //             audioRef.current.play().catch((error) => {
+    //                 console.error('Error playing audio:', error);
+    //             });
+    //         }
+    //     };
 
-        const setupAudio = () => {
-            if (audioRef.current) {
-                audioRef.current.muted = true; // Ensure audio starts muted
-                audioRef.current.play().catch((error) => {
-                    console.error('Error playing audio:', error);
-                });
-            }
-        };
+    //     const setupAudio = () => {
+    //         if (audioRef.current) {
+    //             audioRef.current.muted = true; // Ensure audio starts muted
+    //             audioRef.current.play().catch((error) => {
+    //                 console.error('Error playing audio:', error);
+    //             });
+    //         }
+    //     };
 
-        const addInteractionListeners = () => {
-            document.addEventListener('click', handleUserInteraction);
-            document.addEventListener('keydown', handleUserInteraction);
-            document.addEventListener('touchstart', handleUserInteraction);
-        };
+    //     // const addInteractionListeners = () => {
+    //     //     document.addEventListener('click', handleUserInteraction);
+    //     //     document.addEventListener('keydown', handleUserInteraction);
+    //     //     document.addEventListener('touchstart', handleUserInteraction);
+    //     // };
 
-        const removeInteractionListeners = () => {
-            document.removeEventListener('click', handleUserInteraction);
-            document.removeEventListener('keydown', handleUserInteraction);
-            document.removeEventListener('touchstart', handleUserInteraction);
-        };
+    //     // const removeInteractionListeners = () => {
+    //     //     document.removeEventListener('click', handleUserInteraction);
+    //     //     document.removeEventListener('keydown', handleUserInteraction);
+    //     //     document.removeEventListener('touchstart', handleUserInteraction);
+    //     // };
 
-        const initializeTelegramWebApp = () => {
-            // @ts-ignore
-            if (window.Telegram && window.Telegram.WebApp) {
-                // @ts-ignore
-                window.Telegram.WebApp.ready();
-                // @ts-ignore
-                window.Telegram.WebApp.onEvent('viewportChanged', () => {
-                    setupAudio(); // Re-setup audio on each viewport change
-                    addInteractionListeners(); // Ensure interaction listeners are added
-                });
-            }
-        };
+    //     const initializeTelegramWebApp = () => {
+    //         // @ts-ignore
+    //         if (window.Telegram && window.Telegram.WebApp) {
+    //             // @ts-ignore
+    //             window.Telegram.WebApp.ready();
+    //             // @ts-ignore
+    //             window.Telegram.WebApp.onEvent('viewportChanged', () => {
+    //                 setupAudio(); // Re-setup audio on each viewport change
+    //                 // addInteractionListeners(); // Ensure interaction listeners are added
+    //             });
+    //         }
+    //     };
 
-        // Setup audio and listeners on initial load
-        setupAudio();
-        addInteractionListeners();
+    //     // Setup audio and listeners on initial load
+    //     setupAudio();
+    //     // addInteractionListeners();
 
-        // Initialize Telegram Web App
-        initializeTelegramWebApp();
+    //     // Initialize Telegram Web App
+    //     initializeTelegramWebApp();
 
-        // Clean up event listeners on component unmount
-        return () => {
-            removeInteractionListeners();
-        };
-    }, []);
+    //     // Clean up event listeners on component unmount
+    //     return () => {
+    //         removeInteractionListeners();
+    //     };
+    // }, []);
 
     const playAudio = () => {
         if (audioRef.current) {
