@@ -11,10 +11,11 @@
     }
 
     &__mute_icon {
-        position: absolute;
+        position: fixed;
         top: 60%;
         right: 10%;
 
+        z-index: 1000;
         .icon {
             filter: brightness(0) saturate(100%) invert(99%) sepia(1%) saturate(3675%) hue-rotate(165deg)
                 brightness(117%) contrast(100%);
