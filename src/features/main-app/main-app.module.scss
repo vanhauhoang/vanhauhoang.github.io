@@ -1,10 +1,23 @@
 .app {
+    position: relative;
+
     &__wrapper {
         width: 100vw;
         height: auto;
 
         @media screen and (max-width: 600px) {
             height: calc(100vh - 150px);
+        }
+    }
+
+    &__mute_icon {
+        position: absolute;
+        top: 60%;
+        right: 10%;
+
+        .icon {
+            filter: brightness(0) saturate(100%) invert(99%) sepia(1%) saturate(3675%) hue-rotate(165deg)
+                brightness(117%) contrast(100%);
         }
     }
 

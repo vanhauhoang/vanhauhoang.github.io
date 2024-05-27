@@ -5,8 +5,9 @@ import { ExtraSpins } from '../extra-spins/extra-spins';
 import { Invitation } from '../invitation/invitation';
 import { Footer } from '../footer/footer';
 import BackgroundSound from '../../assets/sounds/Casino Background Loop.mp3';
-
+import { FaVolumeMute } from 'react-icons/fa';
 import styles from './main-app.module.scss';
+import { AiOutlineMuted } from 'react-icons/ai';
 
 const MainApp: FC = (): ReactElement => {
     const audioRef = useRef<HTMLAudioElement>(null);
@@ -71,12 +72,37 @@ const MainApp: FC = (): ReactElement => {
         };
     }, []);
 
+    const playAudio = () => {
+        if (audioRef.current) {
+            audioRef.current.muted = false;
+            audioRef.current.play().catch((error) => {
+                console.error('Error playing audio:', error);
+            });
+            setIsAudioMuted(false);
+        }
+    };
+
+    const muteAudio = () => {
+        if (audioRef.current) {
+            audioRef.current.muted = true;
+            setIsAudioMuted(true);
+        }
+    };
+
     return (
         <div className={styles.app__wrapper}>
+            <div className={styles.app__mute_icon}>
+                {isAudioMuted ? (
+                    <AiOutlineMuted className={styles.icon} onClick={playAudio} />
+                ) : (
+                    <FaVolumeMute className={styles.icon} onClick={muteAudio} />
+                )}
+            </div>
             <audio ref={audioRef} autoPlay={true} loop={true} muted={isAudioMuted}>
                 <source src={BackgroundSound} type="audio/mpeg" />
                 Your browser does not support the audio element.
             </audio>
+
             <div className={styles.app__container}>
                 <SpinTemplate
                     isUserLoggedIn={!!userData?.userId}
