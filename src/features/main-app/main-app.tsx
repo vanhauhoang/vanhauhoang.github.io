@@ -9,13 +9,31 @@ import BackgroundSound from '../../assets/sounds/Casino Background Loop.mp3';
 import styles from './main-app.module.scss';
 
 const MainApp: FC = (): ReactElement => {
-    const audioRef = useRef<any>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
     const { userData, isMobile, isAvailableToSpin } = useAppContext();
 
     useEffect(() => {
-        if (audioRef.current) {
-            audioRef.current.play();
-        }
+        const handleUserInteraction = () => {
+            if (audioRef.current) {
+                audioRef.current.play().catch((error) => {
+                    console.error('Error playing audio:', error);
+                });
+            }
+            // Remove event listener after first interaction
+            document.removeEventListener('click', handleUserInteraction);
+            document.removeEventListener('keydown', handleUserInteraction);
+            document.removeEventListener('touchstart', handleUserInteraction);
+        };
+
+        document.addEventListener('click', handleUserInteraction);
+        document.addEventListener('keydown', handleUserInteraction);
+        document.addEventListener('touchstart', handleUserInteraction);
+
+        return () => {
+            document.removeEventListener('click', handleUserInteraction);
+            document.removeEventListener('keydown', handleUserInteraction);
+            document.removeEventListener('touchstart', handleUserInteraction);
+        };
     }, []);
 
     return (
