@@ -18,6 +18,9 @@ const MainApp: FC = (): ReactElement => {
             if (audioRef.current) {
                 audioRef.current.muted = false; // Unmute the audio
                 setIsAudioMuted(false);
+                audioRef.current.play().catch((error) => {
+                    console.error('Error playing audio:', error);
+                });
             }
             document.removeEventListener('click', handleUserInteraction);
             document.removeEventListener('keydown', handleUserInteraction);
@@ -26,6 +29,7 @@ const MainApp: FC = (): ReactElement => {
 
         const setupAudio = () => {
             if (audioRef.current) {
+                audioRef.current.muted = true; // Ensure audio starts muted
                 audioRef.current.play().catch((error) => {
                     console.error('Error playing audio:', error);
                 });
@@ -35,17 +39,26 @@ const MainApp: FC = (): ReactElement => {
             document.addEventListener('touchstart', handleUserInteraction);
         };
 
-        // Make sure the audio is set up every time the app loads
-        setupAudio();
+        // Telegram WebApp initialization
+        //@ts-ignore
+        if (window.Telegram && window.Telegram.WebApp) {
+            //@ts-ignore
+            window.Telegram.WebApp.ready();
+            //@ts-ignore
+            window.Telegram.WebApp.onEvent('viewportChanged', () => {
+                setupAudio(); // Re-setup audio on each viewport change
+            });
+        } else {
+            // Fallback if not running within Telegram
+            setupAudio();
+        }
 
-        // Clean up event listeners on component unmount
         return () => {
             document.removeEventListener('click', handleUserInteraction);
             document.removeEventListener('keydown', handleUserInteraction);
             document.removeEventListener('touchstart', handleUserInteraction);
         };
     }, []);
-
     return (
         <div className={styles.app__wrapper}>
             <audio ref={audioRef} autoPlay={true} loop={true} muted={isAudioMuted}>
