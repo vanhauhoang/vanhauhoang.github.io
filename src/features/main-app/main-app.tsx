@@ -22,9 +22,6 @@ const MainApp: FC = (): ReactElement => {
                     console.error('Error playing audio:', error);
                 });
             }
-            document.removeEventListener('click', handleUserInteraction);
-            document.removeEventListener('keydown', handleUserInteraction);
-            document.removeEventListener('touchstart', handleUserInteraction);
         };
 
         const setupAudio = () => {
@@ -34,9 +31,18 @@ const MainApp: FC = (): ReactElement => {
                     console.error('Error playing audio:', error);
                 });
             }
+        };
+
+        const addInteractionListeners = () => {
             document.addEventListener('click', handleUserInteraction);
             document.addEventListener('keydown', handleUserInteraction);
             document.addEventListener('touchstart', handleUserInteraction);
+        };
+
+        const removeInteractionListeners = () => {
+            document.removeEventListener('click', handleUserInteraction);
+            document.removeEventListener('keydown', handleUserInteraction);
+            document.removeEventListener('touchstart', handleUserInteraction);
         };
 
         // Telegram WebApp initialization
@@ -47,18 +53,20 @@ const MainApp: FC = (): ReactElement => {
             //@ts-ignore
             window.Telegram.WebApp.onEvent('viewportChanged', () => {
                 setupAudio(); // Re-setup audio on each viewport change
+                addInteractionListeners(); // Ensure interaction listeners are added
             });
         } else {
             // Fallback if not running within Telegram
             setupAudio();
+            addInteractionListeners();
         }
 
+        // Clean up event listeners on component unmount
         return () => {
-            document.removeEventListener('click', handleUserInteraction);
-            document.removeEventListener('keydown', handleUserInteraction);
-            document.removeEventListener('touchstart', handleUserInteraction);
+            removeInteractionListeners();
         };
     }, []);
+
     return (
         <div className={styles.app__wrapper}>
             <audio ref={audioRef} autoPlay={true} loop={true} muted={isAudioMuted}>
