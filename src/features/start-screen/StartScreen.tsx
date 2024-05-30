@@ -5,11 +5,14 @@ import { Logo } from '../../shared/components/logo';
 import styles from './start-screen.module.scss';
 import { Button } from '../../shared/components/button';
 import { useNavigate } from 'react-router-dom';
+import { useAudio } from '../../app/providers/AudioProvider';
 
 const StartScreen: FC = (): ReactElement => {
     const navigate = useNavigate();
+    const { startAudio } = useAudio();
 
     const onRedirectToGame = () => {
+        startAudio();
         navigate('/whiskers/game');
     };
 
