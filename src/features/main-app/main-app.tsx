@@ -5,9 +5,7 @@ import { ExtraSpins } from '../extra-spins/extra-spins';
 import { Invitation } from '../invitation/invitation';
 import { Footer } from '../footer/footer';
 import BackgroundSound from '../../assets/sounds/Casino Background Loop.mp3';
-import { FaVolumeMute } from 'react-icons/fa';
 import styles from './main-app.module.scss';
-import { AiOutlineMuted } from 'react-icons/ai';
 
 const MainApp: FC = (): ReactElement => {
     const audioRef = useRef<HTMLAudioElement>(null);
