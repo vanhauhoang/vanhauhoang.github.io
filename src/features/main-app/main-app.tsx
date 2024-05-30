@@ -12,7 +12,7 @@ import { AiOutlineMuted } from 'react-icons/ai';
 const MainApp: FC = (): ReactElement => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const { userData, isMobile, isAvailableToSpin } = useAppContext();
-    const [isAudioMuted, setIsAudioMuted] = useState<boolean>(true);
+    // const [isAudioMuted, setIsAudioMuted] = useState<boolean>(true);
 
     // useEffect(() => {
     //     const handleUserInteraction = () => {
@@ -72,33 +72,33 @@ const MainApp: FC = (): ReactElement => {
     //     };
     // }, []);
 
-    const playAudio = () => {
-        if (audioRef.current) {
-            audioRef.current.muted = false;
-            audioRef.current.play().catch((error) => {
-                console.error('Error playing audio:', error);
-            });
-            setIsAudioMuted(false);
-        }
-    };
+    // const playAudio = () => {
+    //     if (audioRef.current) {
+    //         audioRef.current.muted = false;
+    //         audioRef.current.play().catch((error) => {
+    //             console.error('Error playing audio:', error);
+    //         });
+    //         setIsAudioMuted(false);
+    //     }
+    // };
 
-    const muteAudio = () => {
-        if (audioRef.current) {
-            audioRef.current.muted = true;
-            setIsAudioMuted(true);
-        }
-    };
+    // const muteAudio = () => {
+    //     if (audioRef.current) {
+    //         audioRef.current.muted = true;
+    //         setIsAudioMuted(true);
+    //     }
+    // };
 
     return (
         <div className={styles.app__wrapper}>
-            <div className={styles.app__mute_icon}>
+            {/* <div className={styles.app__mute_icon}>
                 {isAudioMuted ? (
                     <AiOutlineMuted className={styles.icon} onClick={playAudio} />
                 ) : (
                     <FaVolumeMute className={styles.icon} onClick={muteAudio} />
                 )}
-            </div>
-            <audio ref={audioRef} autoPlay={true} loop={true} muted={isAudioMuted}>
+            </div> */}
+            <audio ref={audioRef} autoPlay={true} loop={true}>
                 <source src={BackgroundSound} type="audio/mpeg" />
                 Your browser does not support the audio element.
             </audio>
