@@ -12,7 +12,9 @@ const StartScreen: FC = (): ReactElement => {
     const { startAudio } = useAudio();
 
     const onRedirectToGame = () => {
-        startAudio();
+        setTimeout(() => {
+            startAudio();
+        }, 1000);
         navigate('/whiskers/game');
     };
 

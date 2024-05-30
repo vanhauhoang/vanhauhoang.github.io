@@ -12,11 +12,20 @@ export const useAudio = () => {
 };
 
 export const AudioProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    const audioRef = useRef<HTMLAudioElement>(null);
+    const audioContextRef = useRef<AudioContext | null>(null);
 
     const startAudio = async () => {
-        // @ts-ignore
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioContext = audioContextRef.current;
+        if (!audioContext) {
+            //@ts-ignore
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            audioContextRef.current = audioContext;
+        }
+
+        if (audioContext.state === 'suspended') {
+            await audioContext.resume();
+        }
+
         const response = await fetch(BackgroundSound);
         const arrayBuffer = await response.arrayBuffer();
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
@@ -25,10 +34,6 @@ export const AudioProvider: FC<{ children: ReactNode }> = ({ children }) => {
         source.loop = true;
         source.connect(audioContext.destination);
         source.start(0);
-
-        //@ts-ignore
-        // Store source in ref to stop it later if needed
-        audioRef.current = source as unknown as HTMLAudioElement;
     };
 
     return <AudioContext.Provider value={{ startAudio }}>{children}</AudioContext.Provider>;
