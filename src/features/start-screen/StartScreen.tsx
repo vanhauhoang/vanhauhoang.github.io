@@ -22,7 +22,12 @@ const StartScreen: FC = (): ReactElement => {
                         <Heading level="h1">Spin&Earn</Heading>
                     </div>
                 </div>
-                <Button onClick={onRedirectToGame} fontFamily="Montserrat, sans-serif" text="Start Game" />
+                <Button
+                    stylesForTexts={{ main: { fontSize: '28px' }, sub: {} }}
+                    onClick={onRedirectToGame}
+                    fontFamily="Montserrat, sans-serif"
+                    text="Start Game"
+                />
             </div>
         </div>
     );

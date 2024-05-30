@@ -17,7 +17,7 @@ export const BuyTemplate: FC = (): ReactElement => {
     const { userData } = useAppContext();
 
     const onNavigateToMainScreen = () => {
-        navigate('/whiskers/');
+        navigate(-1);
     };
 
     return (
