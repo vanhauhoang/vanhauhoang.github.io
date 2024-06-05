@@ -41,7 +41,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 ],
             }}
             actionsConfiguration={{
-                twaReturnUrl: 'https://t.me/DemoDappWithTonConnectBot/demo',
+                twaReturnUrl: 'https://t.me/testWhiskers_bot/testwhisk',
             }}
         >
             <AppContextProvider>

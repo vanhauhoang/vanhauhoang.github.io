@@ -10,6 +10,7 @@ import { useMediaQuery } from 'react-responsive';
 import { FC, ReactElement } from 'react';
 import backIcon from '../../assets/images/left-arrow.png';
 import { useAppContext } from '../../app/providers/AppContext';
+import { TonConnectModal } from '../ton-connect-modal/ton-connect-modal';
 
 export const BuyTemplate: FC = (): ReactElement => {
     const navigate = useNavigate();
@@ -87,12 +88,13 @@ export const BuyTemplate: FC = (): ReactElement => {
                             </div>
                         </div>
                         <div className={styles.buy__footer_connect_wallet}>
-                            <Typography fontSize={isMobile ? '16px' : '50px'} fontFamily="Montserrat, sans-serif">
+                            <TonConnectModal />
+                            {/* <Typography fontSize={isMobile ? '16px' : '50px'} fontFamily="Montserrat, sans-serif">
                                 EQCO..P0zX
                             </Typography>
                             <Typography fontSize={isMobile ? '14px' : '50px'} fontFamily="Montserrat, sans-serif">
                                 Disconnect
-                            </Typography>
+                            </Typography> */}
                         </div>
                     </div>
                 </div>
