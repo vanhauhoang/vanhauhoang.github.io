@@ -1,5 +1,5 @@
 import { FC, ReactElement } from 'react';
-import { Button } from '../../shared/components/button';
+// import { Button } from '../../shared/components/button';
 import { Typography } from '../../shared/components/typography';
 
 import styles from './footer.module.scss';
