@@ -3,6 +3,7 @@ import { Button } from '../../shared/components/button';
 import { Typography } from '../../shared/components/typography';
 
 import styles from './footer.module.scss';
+import { TonConnectButton } from '@tonconnect/ui-react';
 
 interface Props {
     unclaimedTokens: number | undefined;
@@ -19,7 +20,8 @@ export const Footer: FC<Props> = ({ unclaimedTokens, isMobile }): ReactElement =
                         {unclaimedTokens || 0}
                     </Typography>
                 </div>
-                <Button
+                <TonConnectButton />
+                {/* <Button
                     fontFamily={'Montserrat, sans-serif'}
                     height={isMobile ? '42px' : '42px'}
                     fontSize={isMobile ? '16px' : '40px'}
@@ -29,7 +31,7 @@ export const Footer: FC<Props> = ({ unclaimedTokens, isMobile }): ReactElement =
                     width={'fit-content'}
                     textTransform={'none'}
                     borderRadius="24px"
-                />
+                /> */}
             </div>
         </div>
     );
