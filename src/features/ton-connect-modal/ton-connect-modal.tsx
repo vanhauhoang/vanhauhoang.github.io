@@ -2,6 +2,9 @@ import { Button } from '../../shared/components/button';
 import { Typography } from '../../shared/components/typography';
 import { useAppContext } from '../../app/providers/AppContext';
 import { useTonConnect } from '../../shared/libs/hooks/useTonConnect';
+import { useEffect } from 'react';
+import { saveUserTonAddress } from '../../shared/api/user/thunks';
+// import { useTonWallet } from '@tonconnect/ui-react';
 
 function shortAddress(address: string): string {
     const firstPart = address.slice(0, 4);
@@ -14,6 +17,8 @@ export const TonConnectModal = () => {
     const { isMobile } = useAppContext();
 
     const { userFriendlyAddress, open } = useTonConnect();
+    // const wallet = useTonWallet();
+    const { userData } = useAppContext();
 
     const onDisconnectWallet = () => {
         for (const key in localStorage) {
@@ -24,6 +29,12 @@ export const TonConnectModal = () => {
 
         window.location.reload();
     };
+
+    useEffect(() => {
+        if (userData && userData.userTonAddress !== userFriendlyAddress && userFriendlyAddress && userData?.userId) {
+            saveUserTonAddress(userData?.userId, { userTonAddress: userFriendlyAddress });
+        }
+    }, [userData, userFriendlyAddress]);
 
     return (
         <>

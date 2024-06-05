@@ -51,3 +51,21 @@ export const referralUser = async (referredUserId: string, body: ReferralBody) =
     }
 };
 
+export const saveUserTonAddress = async (userId: string, body: { userTonAddress: string }) => {
+    try {
+        const res = await userApi.saveUserTonAddress(userId, body);
+        return res.data;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+export const claimWhisks = async (userId: string) => {
+    try {
+        const res = await userApi.claimWhisks(userId);
+        return res.data;
+    } catch (err) {
+        console.error(err);
+    }
+};
+

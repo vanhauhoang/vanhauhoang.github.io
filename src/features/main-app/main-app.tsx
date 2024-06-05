@@ -19,7 +19,7 @@ const MainApp: FC = (): ReactElement => {
                 />
                 <ExtraSpins isMobile={isMobile} userData={userData} />
                 <Invitation userData={userData} isMobile={isMobile} />
-                <Footer isMobile={isMobile} unclaimedTokens={userData?.unclaimedTokens} />
+                <Footer isMobile={isMobile} points={userData?.points} />
             </div>
         </div>
     );

@@ -16,7 +16,9 @@ export interface UserData {
     referredBy: null | any;
     referredUsers: any[];
     spinsAvailable: number;
-    unclaimedTokens: number;
+    points: number;
+    unclaimedWhisks: number;
+    userTonAddress: string;
     updatedAt: string;
     lastSpinTime: string[];
     userId: string;
@@ -41,6 +43,7 @@ interface AppContextType {
     isAvailableToSpin: boolean;
     tgUser: TelegramUserData | null;
     updateFreeSpins: () => void;
+    updateUnclaimedWhisks: () => void;
     updateBonusSpins: (countSpins?: number) => void;
     updateTempWinScore: (score: number) => void;
 }
@@ -105,7 +108,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const res = await loginUser(tgUser?.id?.toString() || '574813379'); //574813379
+                const res = await loginUser(tgUser?.id?.toString() || '849293092'); //574813379
                 if (res) {
                     setUserData(res.user);
                     if (uriParams?.tgWebAppStartParam) {
@@ -157,7 +160,8 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
                     setTimeout(() => {
                         setUserData((prevUserData: any) => ({
                             ...prevUserData,
-                            unclaimedTokens: prevUserData.unclaimedTokens + score,
+                            points: prevUserData.points + score,
+                            unclaimedWhisks: prevUserData.unclaimedWhisks + score,
                         }));
                     }, WHEEL_SPINNING_SECONDS);
                 }
@@ -188,6 +192,14 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
         }
     };
 
+    const updateUnclaimedWhisks = () => {
+        setUserData((prevUserData: any) => ({
+            ...prevUserData,
+            points: 0,
+            unclaimedWhisks: 0,
+        }));
+    };
+
     function onExitFromApp() {
         removeAllCookies();
         tg.close();
@@ -204,6 +216,7 @@ export const AppContextProvider: React.FC<{ children: ReactElement | ReactElemen
                 updateTempWinScore,
                 updateFreeSpins,
                 updateBonusSpins,
+                updateUnclaimedWhisks,
             }}
         >
             {children}

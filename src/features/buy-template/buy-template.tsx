@@ -11,14 +11,51 @@ import { FC, ReactElement } from 'react';
 import backIcon from '../../assets/images/left-arrow.png';
 import { useAppContext } from '../../app/providers/AppContext';
 import { TonConnectModal } from '../ton-connect-modal/ton-connect-modal';
+import { claimWhisks } from '../../shared/api/user/thunks';
+import { Flip, toast } from 'react-toastify';
 
 export const BuyTemplate: FC = (): ReactElement => {
     const navigate = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
-    const { userData } = useAppContext();
+    const { userData, updateUnclaimedWhisks } = useAppContext();
 
     const onNavigateToMainScreen = () => {
         navigate(-1);
+    };
+
+    const onClaimWhisks = () => {
+        if (userData?.userId) {
+            claimWhisks(userData.userId)
+                .then((res) => {
+                    updateUnclaimedWhisks();
+                    if (res.status === 200) {
+                        toast.success(`You claimed ${userData?.unclaimedWhisks} whisks`, {
+                            position: 'bottom-left',
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: 'dark',
+                            transition: Flip,
+                        });
+                    }
+                })
+                .catch(() => {
+                    toast.error(`Cannot claim whisks. Try again`, {
+                        position: 'bottom-left',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'dark',
+                        transition: Flip,
+                    });
+                });
+        }
     };
 
     return (
@@ -72,9 +109,10 @@ export const BuyTemplate: FC = (): ReactElement => {
                                     fontSize={isMobile ? '30px' : '50px'}
                                     fontFamily="Roundy Rainbows, sans-serif"
                                 >
-                                    2500
+                                    {userData?.points || 0}
                                 </Typography>
                                 <Button
+                                    onClick={onClaimWhisks}
                                     fontFamily={'Montserrat, sans-serif'}
                                     height={isMobile ? '24px' : '42px'}
                                     fontSize={isMobile ? '16px' : '40px'}
@@ -89,12 +127,6 @@ export const BuyTemplate: FC = (): ReactElement => {
                         </div>
                         <div className={styles.buy__footer_connect_wallet}>
                             <TonConnectModal />
-                            {/* <Typography fontSize={isMobile ? '16px' : '50px'} fontFamily="Montserrat, sans-serif">
-                                EQCO..P0zX
-                            </Typography>
-                            <Typography fontSize={isMobile ? '14px' : '50px'} fontFamily="Montserrat, sans-serif">
-                                Disconnect
-                            </Typography> */}
                         </div>
                     </div>
                 </div>
