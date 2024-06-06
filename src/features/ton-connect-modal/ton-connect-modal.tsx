@@ -27,7 +27,7 @@ export const TonConnectModal = () => {
             }
         }
 
-        window.location.reload();
+        window.location.href = '/';
     };
 
     useEffect(() => {
