@@ -12,7 +12,7 @@ import { THEME, TonConnectUIProvider } from '@tonconnect/ui-react';
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <TonConnectUIProvider
-            manifestUrl="https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json"
+            manifestUrl="https://raw.githubusercontent.com/vanhauhoang/whisk-metadata/main/manifest.json"
             uiPreferences={{ theme: THEME.DARK }}
             walletsListConfiguration={{
                 includeWallets: [
@@ -41,7 +41,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 ],
             }}
             actionsConfiguration={{
-                twaReturnUrl: 'https://t.me/testWhiskers_bot/testwhisk',
+                twaReturnUrl: 'https://t.me/wheelwhiskbot/',
             }}
         >
             <AppContextProvider>
